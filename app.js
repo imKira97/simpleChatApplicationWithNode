@@ -13,7 +13,12 @@ const userRoute = require("./route/user");
 //Model
 const User = require("./model/user");
 
-app.use(cors());
+app.use(
+  cors({
+    //to enable from any origin
+    origin: "*",
+  })
+);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
