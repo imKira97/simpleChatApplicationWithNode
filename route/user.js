@@ -6,5 +6,6 @@ const jsonparser = bodyParser.json();
 
 const userController = require("../controller/user");
 router.post("/user/signUp", jsonparser, userController.newUser);
+router.post("/user/login", jsonparser, userController.loginUser);
 
 module.exports = router;
