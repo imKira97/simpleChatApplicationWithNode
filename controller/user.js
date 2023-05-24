@@ -1,6 +1,34 @@
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const sequelize = require("../util/database");
+const { Op } = require("sequelize");
+
+exports.getUser = async (req, res, next) => {
+  try {
+    console.log("login id" + req.user.id);
+    const userList = await User.findAll({
+      attributes: ["name", "id"],
+      where: { id: { [Op.not]: req.user.id } },
+    });
+    console.log(userList);
+
+    // const userList = await sequelize.query(
+    //   "SELECT name FROM simplegroupchat.users WHERE NOT id=1;",
+    //   { type: sequelize.QueryTypes.SELECT }
+    // );
+    // userList.forEach((user) => {
+    //   console.log(user.name); // Access the 'name' property of each user object
+    // });
+
+    return res.status(201).json({ userList: userList, message: "success" });
+
+    //here we will show all the user in our app to loginUser
+  } catch (err) {
+    console.log(err);
+    return res.status(401).json({ message: "not able to get User" });
+  }
+};
 
 exports.loginUser = async (req, res, next) => {
   try {
