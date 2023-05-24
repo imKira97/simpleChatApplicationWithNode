@@ -98,6 +98,7 @@
                 console.log(result);
                 alert('login successfully');
                 localStorage.setItem("token", result.data.token);
+                window.location.href = "./chat.html"
 
             })
             .catch((err) => {

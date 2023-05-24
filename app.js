@@ -10,8 +10,10 @@ const app = express();
 
 //route
 const userRoute = require("./route/user");
+const chatRoute = require("./route/chat");
 //Model
 const User = require("./model/user");
+const Chat = require("./model/chat");
 
 app.use(
   cors({
@@ -23,6 +25,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(userRoute);
+app.use(chatRoute);
 sequelize
   .sync()
   .then((result) => {

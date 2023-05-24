@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #FFA500, #FF7F00, #FF4500);
+        }
+
+        .user-list-container {
+            height: 650px;
+            /* scrollableList */
+            overflow-y: auto;
+        }
+
+        .list-group-item {
+            background-color: bisque;
+        }
+    </style>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <section class="vh-100">
+        <div class="container">
+            <!--added to extra space-->
+            <div class="row" style="height: 20px;"></div>
+            <div class="row bg-danger  p-1" style="width: 100%; height: 770px; margin-top: 50px;">
+                <div class="container">
+                    <div id="row1" class="row  bg-info m-1" style="width: 100%; height:50px ;">
+                        <div class="col col-3 m-1 ">
+                            <div class="input-group">
+                                <form id="searchGroup" class="d-flex">
+                                    <input id="searchText" type="search" class="form-control"
+                                        placeholder="Search User" />
+                                    <button id="searchGroupBtn" type="button"
+                                        class="btn btn-outline-dark">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col col-8  m-1 bg-primary text-center">
+                            <h4>Chat App</h4>
+                        </div>
+                        <div class="col m-1">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenu2">
+                                    <button class="dropdown-item" type="button">Profile</button>
+                                    <button class="dropdown-item" type="button">Logout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="row2" class="row bg-body m-1" style="width: 100%; height:700px ;">
+                        <div class="col col-3">
+                            <div class="row ">
+                                <div class="col" style=" height:42px ;background-color: aquamarine;">
+                                    <em style="margin-left: 30px; font-size: 20px;">My Chat </em>
+                                    <button type="button" class="btn border-0 btn-outline-primary"
+                                        style="margin-left:90px;">Create <i class="fas fa-plus"></i></button>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div id="meassageListDiv" class="col m-1">
+                                    <div class="user-list-container" style="width: 100%;">
+                                        <ul id="user-list" class="list-group user-list">
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                            <li class="list-group-item"> User 1</li>
+                                            <li class="list-group-item"> User 2</li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col" style="text-align: center; background-color: coral;">
+                                    <h3 id="show_login_user_name">User Name</h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="width: 99%; height: 600px; background-color: lightgray;"></div>
+                            </div>
+                            <div class="row" style=" background-color: coral;">
+                                <div class="col">
+                                    <div class="sendMessage" style="width: 100%;">
+                                        <!--Message Form-->
+                                        <form id="messageForm" class="d-flex">
+                                            <div class="form-group flex-grow-1 m-1">
+                                                <input type="text" id="messageText" class="form-control bg-info"
+                                                    placeholder="Enter a message" required>
+                                            </div>
+                                            <button id="sendBtn" type="submit"
+                                                class="btn btn-outline-primary border-0">Send</button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</body>
+
+<script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script src="chat.js"></script>
+
+</html>
