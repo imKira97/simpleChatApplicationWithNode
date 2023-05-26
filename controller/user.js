@@ -6,22 +6,18 @@ const { Op } = require("sequelize");
 
 exports.getUser = async (req, res, next) => {
   try {
-    console.log("login id" + req.user.id);
+    const loginUserName = req.user.name;
+    console.log(loginUserName);
     const userList = await User.findAll({
       attributes: ["name", "id"],
       where: { id: { [Op.not]: req.user.id } },
     });
-    console.log(userList);
 
-    // const userList = await sequelize.query(
-    //   "SELECT name FROM simplegroupchat.users WHERE NOT id=1;",
-    //   { type: sequelize.QueryTypes.SELECT }
-    // );
-    // userList.forEach((user) => {
-    //   console.log(user.name); // Access the 'name' property of each user object
-    // });
-
-    return res.status(201).json({ userList: userList, message: "success" });
+    return res.status(201).json({
+      userList: userList,
+      loginUser: loginUserName,
+      message: "success",
+    });
 
     //here we will show all the user in our app to loginUser
   } catch (err) {

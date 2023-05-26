@@ -18,7 +18,9 @@ window.addEventListener("DOMContentLoaded", () => {
     .get("http:localhost:5000/user/getUser", config)
     .then((res) => {
       const userList = res.data.userList;
-      console.log(userList);
+      const loginUserName = res.data.loginUser;
+      document.getElementById("show_login_user_name").innerHTML = loginUserName;
+
       for (let i = 0; i < userList.length; i++) {
         toCreateListItem(res.data.userList[i]);
       }
@@ -47,7 +49,6 @@ msgForm.addEventListener("submit", (e) => {
 });
 
 function toCreateListItem(data) {
-  console.log(data.name);
   const listUser = document.createElement("button");
   listUser.type = "button";
   listUser.className = "list-group-item list-group-item-action";
