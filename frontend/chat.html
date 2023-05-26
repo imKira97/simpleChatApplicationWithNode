@@ -14,6 +14,18 @@
             background: linear-gradient(to bottom, #FFA500, #FF7F00, #FF4500);
         }
 
+
+
+        .wholeContainer {
+            width: 100%;
+            height: 770px;
+            margin-top: 40px;
+            background-color: darkcyan;
+            padding: 3px;
+            border: 2px solid black;
+
+        }
+
         .user-list-container {
             height: 650px;
             /* scrollableList */
@@ -22,6 +34,41 @@
 
         .list-group-item {
             background-color: bisque;
+        }
+
+        .message-container {
+            background-color: #FFA500;
+            height: 600px;
+            overflow-y: scroll;
+
+        }
+
+        .message {
+            background-color: cornsilk;
+            width: 20%;
+            margin: 10px;
+            padding: 5px;
+            border: 2px solid black;
+            border-radius: 10px;
+
+
+        }
+
+        .left {
+            float: left;
+            clear: both;
+
+        }
+
+        .right {
+            float: right;
+            clear: both;
+
+        }
+
+        div#row1 {
+            border: 2px solid;
+            width: 100%;
         }
     </style>
 
@@ -33,10 +80,10 @@
         <div class="container">
             <!--added to extra space-->
             <div class="row" style="height: 20px;"></div>
-            <div class="row bg-danger  p-1" style="width: 100%; height: 770px; margin-top: 50px;">
+            <div class="row wholeContainer">
                 <div class="container">
-                    <div id="row1" class="row  bg-info " style="width: 100%; height:50px ;margin:10px;padding:2px">
-                        <div class="col col-lg-3 m-1 ">
+                    <div id="row1" class="row  bg-info  m-1">
+                        <div class="col col-lg-3 m-1  ">
                             <div class="input-group">
                                 <form id="searchGroup" class="d-flex">
                                     <input id="searchText" type="search" class="form-control"
@@ -62,17 +109,18 @@
                         </div>
                     </div>
 
-                    <div id="row2" class="row bg-body m-1" style="width: 100%; height:700px ;">
+                    <div id="row2" class="row bg-body m-1" style="width: 100%; height:695px;border:2px solid black">
                         <div class="col col-3">
-                            <div class="row ">
-                                <div class="col" style=" height:42px ;background-color: aquamarine;">
-                                    <em style="margin-left: 30px; font-size: 20px;">My Chat </em>
+                            <div class="row" style="border:1px solid wheat">
+                                <div class="col"
+                                    style=" height:42px ;background-color: aquamarine; text-align: center;font-family: 'Franklin Gothic Medium'; font-size: large;">
+                                    My chat
                                     <button type="button" class="btn border-0 btn-outline-primary"
                                         style="margin-left:90px;">Create <i class="fas fa-plus"></i></button>
                                 </div>
 
                             </div>
-                            <div class="row">
+                            <div class="row" style="border:1px solid wheat">
                                 <div class="col m-1">
                                     <div id="user-list-container" class="list-group" style="width: 100%;">
                                     </div>
@@ -80,21 +128,37 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="row">
+                            <div class="row" style="border:1px solid wheat">
                                 <div class="col" style="text-align: center; background-color: coral;">
                                     <h3 id="show_login_user_name"
                                         style="text-align: center;text-transform: capitalize;">User Name</h3>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col" style="width: 99%; height: 600px; background-color: lightgray;"></div>
+                            <div class="row" style="border:1px solid wheat">
+                                <div class="message-container">
+                                    <div class="message left"> Hii How Are You?</div>
+                                    <div class="message right"> I am fine.</div>
+                                    <div class="message left"> Hii How Are You?</div>
+                                    <div class="message right"> I am fine.</div>
+                                    <div class="message left"> Hii How Are You?</div>
+                                    <div class="message right"> I am fine.</div>
+                                    <div class="message left"> Hii How Are You?</div>
+                                    <div class="message right"> I am fine.</div>
+                                    <div class="message left"> Hii How Are You?</div>
+                                    <div class="message right"> I am fine.</div>
+                                    <div class="message left"> Hii How Are You?</div>
+                                    <div class="message right"> I am fine.</div>
+                                    <div class="message left"> Hii How Are You?</div>
+                                    <div class="message right"> I am fine.</div>
+                                </div>
                             </div>
-                            <div class="row" style=" background-color: coral;">
+                            <div class="row"
+                                style=" background-color: coral;border:1px solid wheat;height: 45px;padding: 1px;">
                                 <div class="col">
                                     <div class="sendMessage" style="width: 100%;">
                                         <!--Message Form-->
                                         <form id="messageForm" class="d-flex">
-                                            <div class="form-group flex-grow-1 m-1">
+                                            <div class="form-group flex-grow-1 ">
                                                 <input type="text" id="messageText" class="form-control bg-info"
                                                     placeholder="Enter a message" required>
                                             </div>
