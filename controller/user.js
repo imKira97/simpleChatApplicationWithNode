@@ -4,6 +4,28 @@ const jwt = require("jsonwebtoken");
 const sequelize = require("../util/database");
 const { Op } = require("sequelize");
 
+exports.searchUser = async (req, res, next) => {
+  try {
+    const keyword = req.query.search;
+    console.log("keyword" + keyword);
+    const fetchUser = await User.findAll({
+      attributes: ["name"],
+      where: {
+        id: { [Op.ne]: req.user.id },
+        name: { [Op.like]: `${keyword}%` },
+      },
+    });
+    console.log("fetch " + fetchUser);
+    if (fetchUser) {
+      return res.status(201).json({ user: fetchUser });
+    } else {
+      return res.status(402).json({ message: "No user Found" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(401).json({ err: "not found" });
+  }
+};
 exports.getUser = async (req, res, next) => {
   try {
     const loginUserName = req.user.name;
@@ -28,28 +50,23 @@ exports.getUser = async (req, res, next) => {
 
 exports.loginUser = async (req, res, next) => {
   try {
-    console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
 
     const userMatch = await User.findOne({ where: { email: email } });
-    console.log("user", userMatch);
 
     if (userMatch) {
       const isUserPassword = await bcrypt.compare(password, userMatch.password);
 
       if (isUserPassword) {
-        console.log("login success");
         return res.status(201).json({
           message: "login success",
           token: generateToken(userMatch.id),
         });
       } else {
-        console.log("password fail");
         return res.status(401).json({ message: "User not authorized  " });
       }
     } else {
-      console.log("user not exist");
       return res.status(404).json({ message: "User not found" });
     }
   } catch (err) {

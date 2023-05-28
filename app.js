@@ -14,6 +14,7 @@ const chatRoute = require("./route/chat");
 //Model
 const User = require("./model/user");
 const Chat = require("./model/chat");
+const Message = require("./model/messages");
 
 app.use(
   cors({
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(userRoute);
 app.use(chatRoute);
+
 sequelize
   .sync()
   .then((result) => {

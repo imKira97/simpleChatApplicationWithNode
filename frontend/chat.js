@@ -2,8 +2,8 @@
 const msgForm = document.getElementById("messageForm");
 const btnSend = document.getElementById("sendBtn");
 
-//all users
-const userListDiv = document.getElementById("user-list-container");
+//all chat
+const userListDiv = document.getElementById("mychat-list-container");
 
 const token = localStorage.getItem("token");
 const config = {
@@ -12,24 +12,96 @@ const config = {
   },
 };
 
-//show login users
-window.addEventListener("DOMContentLoaded", () => {
-  axios
-    .get("http:localhost:5000/user/getUser", config)
-    .then((res) => {
-      const userList = res.data.userList;
-      const loginUserName = res.data.loginUser;
-      document.getElementById("show_login_user_name").innerHTML = loginUserName;
+// //show login users
+// window.addEventListener("DOMContentLoaded", () => {
+//   axios
+//     .get("http:localhost:5000/user/getUser", config)
+//     .then((res) => {
+//       const userList = res.data.userList;
+//       const loginUserName = res.data.loginUser;
+//       document.getElementById("show_login_user_name").innerHTML = loginUserName;
 
-      for (let i = 0; i < userList.length; i++) {
-        toCreateListItem(res.data.userList[i]);
+//       for (let i = 0; i < userList.length; i++) {
+//         toCreateListItem(res.data.userList[i]);
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+
+//search will happen on keyup and btn click also
+const searchBtn = document.getElementById("searchGroupBtn");
+searchBtn.addEventListener("click", searchFun);
+
+document.getElementById("searchText").addEventListener("keyup", searchFun);
+
+//searchContainer
+const searchResultsContainer = document.getElementById(
+  "searchResultsContainer"
+);
+// Add event listener to the document object
+document.addEventListener("click", function (event) {
+  const searchInput = document.getElementById("searchText");
+  const searchResultsContainer = document.getElementById(
+    "searchResultsContainer"
+  );
+
+  // Check if the clicked element is outside the search input and the result container
+  if (event.target !== searchInput && event.target !== searchResultsContainer) {
+    // Hide the search result container
+    searchResultsContainer.style.display = "none";
+  }
+});
+
+//searching
+function searchFun() {
+  const searchName = document.getElementById("searchText").value;
+  searchResultsContainer.innerHTML = "";
+
+  axios
+    .get(`http://localhost:5000/searchUser?search=${searchName}`, config)
+    .then((res) => {
+      const searchResults = res.data.user;
+
+      searchResults.forEach((result) => {
+        const resultItem = document.createElement("div");
+        resultItem.classList.add("search-result");
+
+        const title = document.createElement("h3");
+        title.classList.add("search-result-title");
+        title.textContent = result.name;
+
+        resultItem.appendChild(title);
+
+        // Add a click event listener to each search result item
+        resultItem.addEventListener("click", () => {
+          // Retrieve the user ID or any other identifier associated with the clicked result item
+          const userName = result.name;
+
+          // Perform desired action with the retrieved identifier
+          openChatWindow(userName); // Replace this with your desired action
+        });
+
+        searchResultsContainer.appendChild(resultItem);
+      });
+      // Show or hide the search results container based on the search text
+      if (searchName.length > 0 && searchResults.length > 0) {
+        searchResultsContainer.style.display = "block";
+      } else {
+        searchResultsContainer.style.display = "none";
       }
     })
     .catch((err) => {
       console.log(err);
     });
-});
+}
 
+//open chat window
+function openChatWindow(userName) {
+  searchResultsContainer.style.display = "none";
+  console.log(userName);
+}
 //send Message
 msgForm.addEventListener("submit", (e) => {
   e.preventDefault();

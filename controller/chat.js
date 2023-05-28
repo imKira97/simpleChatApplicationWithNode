@@ -21,3 +21,8 @@ exports.sendMessage = async (req, res, next) => {
     return res.status(400).json({ message: "failed" });
   }
 };
+
+exports.accessChat = async (req, res, next) => {
+  try {
+  } catch (err) {}
+};
