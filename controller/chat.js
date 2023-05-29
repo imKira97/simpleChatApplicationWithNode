@@ -43,7 +43,12 @@ exports.getChat = async (req, res, next) => {
         multimedia: messages.media_url,
       };
     });
-    return res.status(200).json({ messages: extractMessage });
+    const data = {
+      senderName: req.user.name,
+      recieverName: reciever,
+      messageData: extractMessage,
+    };
+    return res.status(200).json({ chatData: data, success: "true" });
   } catch (err) {
     console.log(err);
   }

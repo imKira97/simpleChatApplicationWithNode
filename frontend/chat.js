@@ -145,11 +145,30 @@ function getMessage(recieverName, userId) {
   axios
     .get(`http://localhost:5000/getMessage?reciever=${reciever}`, config)
     .then((res) => {
-      console.log(res);
+      const senderName = res.data.chatData.senderName;
+      const recieverName = res.data.chatData.recieverName;
+      const messages = res.data.chatData.messageData;
+      console.log(senderName, recieverName, messages);
+      for (let i = 0; i < messages.length; i++) {
+        toCreateMessageDiv(messages[i], userId, recieverName, senderName);
+      }
     })
     .catch((err) => {
       console.log(err);
     });
+}
+
+function toCreateMessageDiv(chatData, userId, recieverName, senderName) {
+  const messageContainer = document.querySelector(".message-container");
+  const chatDiv = document.createElement("div");
+  if (chatData.recieverId === userId) {
+    chatDiv.className = "message right";
+    chatDiv.innerHTML = `${senderName}: ${chatData.chat}`;
+  } else {
+    chatDiv.className = "message left";
+    chatDiv.innerHTML = `${recieverName}: ${chatData.chat}`;
+  }
+  messageContainer.appendChild(chatDiv);
 }
 
 function toCreateListItem(data) {
