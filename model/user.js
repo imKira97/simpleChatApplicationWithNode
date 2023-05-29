@@ -6,9 +6,8 @@ const User = sequelize.define(
   {
     id: {
       type: Sequelize.INTEGER,
-      autoIncrement: true,
-      allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
     },
     name: {
       type: Sequelize.STRING,
@@ -31,9 +30,9 @@ const User = sequelize.define(
       defaultValue:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
+    // Add more columns for extra functionalities
     isAdmin: {
       type: Sequelize.BOOLEAN,
-      allowNull: false,
       defaultValue: false,
     },
   },

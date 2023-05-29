@@ -78,9 +78,10 @@ function searchFun() {
         resultItem.addEventListener("click", () => {
           // Retrieve the user ID or any other identifier associated with the clicked result item
           const userName = result.name;
+          const userId = result.id;
 
           // Perform desired action with the retrieved identifier
-          openChatWindow(userName); // Replace this with your desired action
+          openChatWindow(userName, userId); // Replace this with your desired action
         });
 
         searchResultsContainer.appendChild(resultItem);
@@ -98,16 +99,33 @@ function searchFun() {
 }
 
 //open chat window
-function openChatWindow(userName) {
-  searchResultsContainer.style.display = "none";
-  console.log(userName);
+function openChatWindow(userName, userId) {
+  const messageContainer = document.querySelector(".message-container");
+  messageContainer.innerHTML = "";
+
+  // Create chat window elements
+  const chatWindow = document.createElement("div");
+  chatWindow.classList.add("chat-window");
+
+  const chatHeader = document.createElement("div");
+  chatHeader.classList.add("chat-header");
+  chatHeader.id = `${userId}`;
+  chatHeader.textContent = userName;
+
+  // Append chat window elements to the message container
+  chatWindow.appendChild(chatHeader);
+
+  messageContainer.appendChild(chatWindow);
+  getMessage(userName, userId);
 }
+
 //send Message
 msgForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const messageText = document.getElementById("messageText").value;
-  const dateTime = new Date();
-  const data = { messageText: messageText, dateTime: dateTime };
+  const recipientId = document.querySelector(".chat-header").id;
+  console.log(recipientId);
+  const data = { messageText: messageText, recipientId: recipientId };
 
   axios
     .post("http://localhost:5000/sendMessage", data, config)
@@ -119,6 +137,20 @@ msgForm.addEventListener("submit", (e) => {
     });
   document.getElementById("messageText").value = "";
 });
+
+//get Message
+function getMessage(recieverName, userId) {
+  console.log("rec" + recieverName);
+  const reciever = recieverName;
+  axios
+    .get(`http://localhost:5000/getMessage?reciever=${reciever}`, config)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
 function toCreateListItem(data) {
   const listUser = document.createElement("button");

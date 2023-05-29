@@ -14,7 +14,7 @@ const chatRoute = require("./route/chat");
 //Model
 const User = require("./model/user");
 const Chat = require("./model/chat");
-const Message = require("./model/messages");
+const Conversation = require("./model/conversation");
 
 app.use(
   cors({
@@ -27,6 +27,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(userRoute);
 app.use(chatRoute);
+
+// Associations
+User.hasMany(Chat, { foreignKey: "senderId", as: "sentMessages" });
+User.hasMany(Chat, { foreignKey: "receiverId", as: "receivedMessages" });
+User.belongsToMany(Conversation, {
+  through: "user_conversations",
+  foreignKey: "userId",
+  otherKey: "conversationId",
+});
+Conversation.belongsToMany(User, {
+  through: "user_conversations",
+  foreignKey: "conversationId",
+  otherKey: "userId",
+});
+Chat.belongsTo(User, { foreignKey: "senderId", as: "sender" });
+Chat.belongsTo(User, { foreignKey: "receiverId", as: "receiver" });
 
 sequelize
   .sync()

@@ -7,23 +7,24 @@ const jsonparser = bodyParser.json();
 const chatController = require("../controller/chat");
 const authUser = require("../middleware/auth");
 
+//for send
 router.post(
   "/sendMessage",
-  jsonparser,
   authUser.authenticate,
+  jsonparser,
   chatController.sendMessage
+);
+
+//to get
+router.get(
+  "/getMessage",
+  authUser.authenticate,
+  jsonparser,
+  chatController.getChat
 );
 
 // to fetchchat
 //router.get("/", jsonparser, authUser.authenticate, chatController.fetchChat);
-
-// to accessChat
-router.post(
-  "/access",
-  jsonparser,
-  authUser.authenticate,
-  chatController.accessChat
-);
 
 // //for groupchat
 // router.post(

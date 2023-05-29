@@ -9,7 +9,7 @@ exports.searchUser = async (req, res, next) => {
     const keyword = req.query.search;
     console.log("keyword" + keyword);
     const fetchUser = await User.findAll({
-      attributes: ["name"],
+      attributes: ["id", "name"],
       where: {
         id: { [Op.ne]: req.user.id },
         name: { [Op.like]: `${keyword}%` },
