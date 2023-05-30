@@ -14,7 +14,7 @@ const chatRoute = require("./route/chat");
 //Model
 const User = require("./model/user");
 const Chat = require("./model/chat");
-const Conversation = require("./model/conversation");
+const Group = require("./model/group");
 
 app.use(
   cors({
@@ -31,14 +31,19 @@ app.use(chatRoute);
 // Associations
 User.hasMany(Chat, { foreignKey: "senderId", as: "sentMessages" });
 User.hasMany(Chat, { foreignKey: "receiverId", as: "receivedMessages" });
-User.belongsToMany(Conversation, {
-  through: "user_conversations",
+
+//for group
+User.belongsTo(Group, { foreignKey: "adminId", as: "adminOfGroups" });
+User.belongsToMany(Group, {
+  through: "user_Groups",
   foreignKey: "userId",
-  otherKey: "conversationId",
+  otherKey: "GroupId",
 });
-Conversation.belongsToMany(User, {
-  through: "user_conversations",
-  foreignKey: "conversationId",
+
+Group.belongsTo(User, { foreignKey: "adminId", as: "admin" });
+Group.belongsToMany(User, {
+  through: "user_Groups",
+  foreignKey: "GroupId",
   otherKey: "userId",
 });
 Chat.belongsTo(User, { foreignKey: "senderId", as: "sender" });

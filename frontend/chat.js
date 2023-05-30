@@ -5,6 +5,11 @@ const btnSend = document.getElementById("sendBtn");
 //all chat
 const userListDiv = document.getElementById("mychat-list-container");
 
+//reciever
+
+let recieverName = 0;
+let recieverId = 0;
+
 const token = localStorage.getItem("token");
 const config = {
   headers: {
@@ -77,11 +82,11 @@ function searchFun() {
         // Add a click event listener to each search result item
         resultItem.addEventListener("click", () => {
           // Retrieve the user ID or any other identifier associated with the clicked result item
-          const userName = result.name;
-          const userId = result.id;
+          recieverName = result.name;
+          recieverId = result.id;
 
           // Perform desired action with the retrieved identifier
-          openChatWindow(userName, userId); // Replace this with your desired action
+          openChatWindow(recieverName, recieverId); // Replace this with your desired action
         });
 
         searchResultsContainer.appendChild(resultItem);
@@ -116,7 +121,7 @@ function openChatWindow(userName, userId) {
   chatWindow.appendChild(chatHeader);
 
   messageContainer.appendChild(chatWindow);
-  getMessage(userName, userId);
+  startMessageInterval(recieverName, recieverId);
 }
 
 //send Message
@@ -138,9 +143,20 @@ msgForm.addEventListener("submit", (e) => {
   document.getElementById("messageText").value = "";
 });
 
+function startMessageInterval(recieverName, receiverId) {
+  // Call getMessage initially
+  getMessage(recieverName, receiverId);
+
+  // Call getMessage every 1 second
+  setInterval(() => {
+    getMessage(recieverName, receiverId);
+  }, 1000);
+}
+
 //get Message
-function getMessage(recieverName, userId) {
-  console.log("rec" + recieverName);
+
+let lastMessageId = 0;
+function getMessage(recieverName, receiverId) {
   const reciever = recieverName;
   axios
     .get(`http://localhost:5000/getMessage?reciever=${reciever}`, config)
@@ -148,9 +164,14 @@ function getMessage(recieverName, userId) {
       const senderName = res.data.chatData.senderName;
       const recieverName = res.data.chatData.recieverName;
       const messages = res.data.chatData.messageData;
-      console.log(senderName, recieverName, messages);
+
       for (let i = 0; i < messages.length; i++) {
-        toCreateMessageDiv(messages[i], userId, recieverName, senderName);
+        if (messages[i].id > lastMessageId) {
+          toCreateMessageDiv(messages[i], receiverId, recieverName, senderName);
+        }
+      }
+      if (messages.length > 0) {
+        lastMessageId = messages[messages.length - 1].id;
       }
     })
     .catch((err) => {

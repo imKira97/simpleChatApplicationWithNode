@@ -5,13 +5,13 @@ Columns: id (primary key), user1_id (foreign key referencing User table), user2_
 const Sequelize = require("sequelize");
 const sequelize = require("../util/database");
 const User = require("./user");
-const Conversation = sequelize.define("conversations", {
+const Group = sequelize.define("groups", {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  user1Id: {
+  adminId: {
     type: Sequelize.INTEGER,
     allowNull: false,
     references: {
@@ -33,4 +33,4 @@ const Conversation = sequelize.define("conversations", {
     type: Sequelize.STRING,
   },
 });
-module.exports = Conversation;
+module.exports = Group;

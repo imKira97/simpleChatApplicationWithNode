@@ -41,6 +41,7 @@ exports.getChat = async (req, res, next) => {
         recieverId: messages.receiverId,
         chat: messages.text,
         multimedia: messages.media_url,
+        id: messages.id,
       };
     });
     const data = {
