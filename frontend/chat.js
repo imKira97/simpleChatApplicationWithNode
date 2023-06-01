@@ -124,7 +124,7 @@ function openChatWindow(userName, userId) {
   lastMessageId = 0;
   recieverName = userName;
   recieverId = userId;
-  getMessage(recieverName, recieverId);
+  startMessageInterval(recieverName, recieverId);
 }
 
 //send Message
@@ -139,7 +139,7 @@ msgForm.addEventListener("submit", (e) => {
     .post("http://localhost:5000/sendMessage", data, config)
     .then((res) => {
       console.log(res);
-      startMessageInterval(res.data.recUser, res.data.recId);
+      getMessage(res.data.recUser, res.data.recId);
     })
     .catch((err) => {
       console.log(`err`);
