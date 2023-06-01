@@ -61,6 +61,14 @@ exports.newUser = async (req, res, next) => {
   }
 };
 
+exports.getUserName = async (req, res, next) => {
+  try {
+    console.log("here");
+    const userName = req.user.name;
+    return res.status(200).json({ userName: userName });
+  } catch (err) {}
+};
+
 function generateToken(id) {
   return jwt.sign({ userId: id }, process.env.TOKEN_SECRET);
 }

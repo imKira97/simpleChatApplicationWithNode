@@ -12,6 +12,7 @@ const app = express();
 const userRoute = require("./route/user");
 //Model
 const User = require("./model/user");
+const Messages = require("./model/messages");
 
 app.use(
   cors({
