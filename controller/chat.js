@@ -16,7 +16,12 @@ exports.sendMessage = async (req, res, next) => {
       receiverId: receiverUser.id,
       text: messageTxt,
     });
-    return res.status(201).json({ message: "success" });
+
+    return res.status(201).json({
+      message: "success",
+      recUser: receiverUser.name,
+      recId: receiverUser.id,
+    });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: "failed" });

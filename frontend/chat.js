@@ -121,7 +121,10 @@ function openChatWindow(userName, userId) {
   chatWindow.appendChild(chatHeader);
 
   messageContainer.appendChild(chatWindow);
-  startMessageInterval(recieverName, recieverId);
+  lastMessageId = 0;
+  recieverName = userName;
+  recieverId = userId;
+  getMessage(recieverName, recieverId);
 }
 
 //send Message
@@ -136,6 +139,7 @@ msgForm.addEventListener("submit", (e) => {
     .post("http://localhost:5000/sendMessage", data, config)
     .then((res) => {
       console.log(res);
+      startMessageInterval(res.data.recUser, res.data.recId);
     })
     .catch((err) => {
       console.log(`err`);
@@ -144,9 +148,7 @@ msgForm.addEventListener("submit", (e) => {
 });
 
 function startMessageInterval(recieverName, receiverId) {
-  // Call getMessage initially
   getMessage(recieverName, receiverId);
-
   // Call getMessage every 1 second
   setInterval(() => {
     getMessage(recieverName, receiverId);
