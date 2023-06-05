@@ -6,17 +6,10 @@ const Messages = sequelize.define("messages", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
-    allowNull: false,
     primaryKey: true,
   },
-  sender_id: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: User,
-      key: "id",
-    },
-  },
-  test: {
+
+  message: {
     type: Sequelize.STRING,
   },
 });
