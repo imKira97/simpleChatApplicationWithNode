@@ -4,9 +4,35 @@ const User = require("../model/user");
 
 exports.getMessage = async (req, res, next) => {
   try {
-    let messages = await Chat.findAll();
-    let messageArr = Object.entries(messages);
-    return res.status(201).json({ success: true, messages: messageArr });
+    /*
+    The include option allows you to specify which associated models you want to include in the query result. */
+    const messages = await Chat.findAll({
+      include: {
+        model: User,
+      },
+    });
+    // const messageArr = messages.map((message) => ({
+    //   id: message.userId,
+    //   content: message.message,
+    //   user: message.User.name,
+    // }));
+
+    const messageArr = [];
+
+    for (const message of messages) {
+      const user = await User.findByPk(message.userId);
+      const name = user.name;
+
+      messageArr.push({
+        id: message.id,
+        userid: message.userId,
+        message: message.message,
+        user: name,
+      });
+    }
+
+    const messageData = { loginUser: req.user.id, messages: messageArr };
+    return res.status(201).json({ success: true, data: messageData });
   } catch (err) {
     console.log(err);
   }

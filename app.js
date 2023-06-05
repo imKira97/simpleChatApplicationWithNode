@@ -28,7 +28,7 @@ app.use(userRoute);
 app.use(chatRoute);
 
 User.hasMany(Chat);
-Chat.belongsTo(User);
+Chat.belongsTo(User, { foreignKey: "userId" });
 sequelize
   .sync()
   .then((result) => {
