@@ -39,10 +39,13 @@ msgForm.addEventListener("submit", (e) => {
       console.log(err);
     });
   document.getElementById("messageText").value = "";
+  getMessage();
 });
 
 //getMessage
-function getMessage() {
+let chatArray = [];
+async function getMessage() {
+  document.querySelector(".message-container").innerHTML = "";
   let oldMessages = JSON.parse(localStorage.getItem("messages"));
   if (oldMessages == undefined || oldMessages.length == 0) {
     lastMessageId = 0;
@@ -50,31 +53,24 @@ function getMessage() {
     lastMessageId = oldMessages[oldMessages.length - 1].id;
   }
 
-  axios
-    .get(
-      `http://localhost:5000/getMessage?lastMessageId=${lastMessageId}`,
-      config
-    )
-    .then((res) => {
-      console.log(res);
+  const res = await axios.get(
+    `http://localhost:5000/getMessage?lastMessageId=${lastMessageId}`,
+    config
+  );
+  let newMessages = res.data.data.messages;
+  if (oldMessages) {
+    chatArray = oldMessages.concat(newMessages);
+  } else {
+    chatArray = chatArray.concat(newMessages);
+  }
+  // if (chatArray.length > 10) {
+  //   chatArray = chatArray.slice(chatArray.length - 10);
+  // }
 
-      let newMessages = res.data.data.messages;
-      let updatedMessages;
-      if (oldMessages) {
-        updatedMessages = [...oldMessages, ...newMessages];
-      } else {
-        updatedMessages = [...newMessages];
-      }
-
-      updatedMessages = updatedMessages.slice(updatedMessages.length - 10);
-      localStorage.setItem("messages", JSON.stringify(updatedMessages));
-      updatedMessages.forEach((chat) => {
-        toCreateMessageDiv(chat, loginUserId);
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  localStorage.setItem("messages", JSON.stringify(chatArray));
+  chatArray.forEach((chat) => {
+    toCreateMessageDiv(chat, loginUserId);
+  });
 }
 
 //to create message box in UI
