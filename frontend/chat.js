@@ -1,6 +1,8 @@
 const msgForm = document.getElementById("messageForm");
 const btnSend = document.getElementById("sendBtn");
 const token = localStorage.getItem("token");
+let loginUserId;
+let lastMessageId = localStorage.getItem("lastMessageId") || 0;
 const config = {
   headers: {
     Authorization: token,
@@ -13,13 +15,14 @@ window.addEventListener("DOMContentLoaded", () => {
     .then((res) => {
       document.getElementById("show_login_user_name").innerHTML =
         res.data.userName;
+      loginUserId = res.data.id;
     })
     .catch((err) => {});
 });
 
 window.addEventListener("DOMContentLoaded", getMessage);
 
-setInterval(getMessage, 1000);
+//setInterval(getMessage, 1000);
 
 //sendMessage
 msgForm.addEventListener("submit", (e) => {
@@ -36,26 +39,38 @@ msgForm.addEventListener("submit", (e) => {
       console.log(err);
     });
   document.getElementById("messageText").value = "";
-  getMessage();
 });
 
 //getMessage
-let lastMessageId = 0;
 function getMessage() {
+  let oldMessages = JSON.parse(localStorage.getItem("messages"));
+  if (oldMessages == undefined || oldMessages.length == 0) {
+    lastMessageId = 0;
+  } else {
+    lastMessageId = oldMessages[oldMessages.length - 1].id;
+  }
+
   axios
-    .get("http://localhost:5000/getMessage", config)
+    .get(
+      `http://localhost:5000/getMessage?lastMessageId=${lastMessageId}`,
+      config
+    )
     .then((res) => {
       console.log(res);
-      const loginUserId = res.data.data.loginUser;
-      const message = res.data.data.messages;
-      for (let i = 0; i < message.length; i++) {
-        if (message[i].id > lastMessageId) {
-          toCreateMessageDiv(message[i], loginUserId);
-        }
+
+      let newMessages = res.data.data.messages;
+      let updatedMessages;
+      if (oldMessages) {
+        updatedMessages = [...oldMessages, ...newMessages];
+      } else {
+        updatedMessages = [...newMessages];
       }
-      if (message.length > 0) {
-        lastMessageId = message[message.length - 1].id;
-      }
+
+      updatedMessages = updatedMessages.slice(updatedMessages.length - 10);
+      localStorage.setItem("messages", JSON.stringify(updatedMessages));
+      updatedMessages.forEach((chat) => {
+        toCreateMessageDiv(chat, loginUserId);
+      });
     })
     .catch((err) => {
       console.log(err);

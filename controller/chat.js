@@ -6,17 +6,29 @@ exports.getMessage = async (req, res, next) => {
   try {
     /*
     The include option allows you to specify which associated models you want to include in the query result. */
-    const messages = await Chat.findAll({
+    const { lastMessageId } = req.query;
+    console.log("last Id " + lastMessageId);
+    let messages = await Chat.findAll({
       include: {
         model: User,
       },
     });
+
+    let index = 0;
+    if (lastMessageId) {
+      messages.forEach((chat) => {
+        if (chat.id == lastMessageId) {
+          index = lastMessageId;
+        }
+      });
+    }
+    messages = messages.slice(index);
+
     // const messageArr = messages.map((message) => ({
     //   id: message.userId,
     //   content: message.message,
     //   user: message.User.name,
     // }));
-
     const messageArr = [];
 
     for (const message of messages) {
@@ -47,7 +59,7 @@ exports.sendMessage = async (req, res, next) => {
       message: messageText,
       userId: senderId,
     });
-
+    //const messageData={loginUserId:req.user.id}
     return res.status(201).json({ message: "success" });
   } catch (err) {
     console.log(err);
