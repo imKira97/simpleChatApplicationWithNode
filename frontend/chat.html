@@ -104,6 +104,30 @@
             margin: auto;
             width: 100%;
         }
+
+        #createGroupList {
+            position: relative;
+        }
+
+        .user-list {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            z-index: 2;
+        }
+
+        .modal-dialog {
+            overflow-y: initial;
+        }
+
+        .modal-body {
+            height: 50vh;
+            overflow-y: auto;
+        }
     </style>
 
     <title>Chat</title>
@@ -120,7 +144,7 @@
                         <div class="col-3  m-1  ">
                             <div class="input-group">
                                 <form id="searchGroup" class="d-flex">
-                                    <input id="searchText" type="search" class="form-control" placeholder="Search User"
+                                    <input id="searchText" type="search" class="form-control" placeholder="Search"
                                         style="width: 150px;margin: 5px;" />
                                     <button id="searchGroupBtn" type="button"
                                         class="btn btn-outline-dark">Search</button>
@@ -177,14 +201,64 @@
                     <div id="row2" class="row bg-body m-1" style="width: 100%; height:695px;border:2px solid black">
                         <div class="col col-3">
                             <div class="row" style="border:1px solid wheat">
-                                <div class="col"
-                                    style=" height:42px ;background-color: aquamarine; text-align: center;font-family: 'Franklin Gothic Medium'; font-size: large;">
-                                    My chat
-                                    <button type="button" class="btn border-0 btn-outline-primary"
-                                        style="margin-left:90px;">Create <i class="fas fa-plus"></i></button>
+                                <div class="col d-flex align-items-center justify-content-between"
+                                    style=" height:42px ;background-color: aquamarine;font-family: 'Franklin Gothic Medium'; font-size: large;">
+                                    <h6 class="m-3">My Chat</h6>
+                                    <button type="button" id="createGroupBtn"
+                                        class="btn border-0 btn-outline-primary m-3" data-bs-toggle="modal"
+                                        data-bs-target="#createGroupModal" style="margin-left:90px;">Create
+                                        Group <i class="fas fa-plus"></i></button>
+                                    <div id="createGroupModal" class="modal fade" tabindex="-1"
+                                        aria-labelledby="createGroupModal" aria-hidden="true" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <div class="form-group">
+                                                        <label for="groupName">Group Name:</label>
+                                                        <input type="text" class="form-control" id="groupName"
+                                                            size="45">
+                                                    </div>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+
+
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- Group Name input -->
+
+
+                                                    <!-- User List with checkboxes -->
+                                                    <div class="form-group">
+                                                        <label>Select Users:</label>
+                                                        <div class="list-group " id="user-list-modal">
+                                                            <!-- <div class="list-group-item">
+                                                                <input type="checkbox" id="user1" name="users"
+                                                                    value="user1">
+                                                                <label for="user1">User 1</label>
+                                                            </div>
+                                                            <div class="list-group-item">
+                                                                <input type="checkbox" id="user2" name="users"
+                                                                    value="user2">
+                                                                <label for="user2">User 2</label>
+                                                            </div> -->
+                                                            <!-- Add more users as needed -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" id="btnCreateGroupInModal"
+                                                        class="btn btn-primary" data-dismiss="modal">Create
+                                                        Group</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
 
+
                             </div>
+
                             <div class="row" style="border:1px solid wheat">
                                 <div class="col m-1">
                                     <div id="mychat-list-container" class="list-group" style="width: 100%;">

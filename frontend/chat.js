@@ -1,5 +1,6 @@
 const msgForm = document.getElementById("messageForm");
 const btnSend = document.getElementById("sendBtn");
+const createGroupBtn = document.getElementById("createGroupBtn");
 const token = localStorage.getItem("token");
 let loginUserId;
 let lastMessageId = localStorage.getItem("lastMessageId") || 0;
@@ -45,7 +46,7 @@ msgForm.addEventListener("submit", (e) => {
 //getMessage
 let chatArray = [];
 async function getMessage() {
-  document.querySelector(".message-container").innerHTML = "";
+  document.querySelector(".message-container").textContent = "";
   let oldMessages = JSON.parse(localStorage.getItem("messages"));
   if (oldMessages == undefined || oldMessages.length == 0) {
     lastMessageId = 0;
@@ -85,4 +86,39 @@ function toCreateMessageDiv(message, userId) {
     chatDiv.innerHTML = `${message.user}:${message.message}`;
   }
   messageContainer.appendChild(chatDiv);
+}
+
+createGroupBtn.addEventListener("click", () => {
+  axios
+    .get("http:localhost:5000/getUserList", config)
+    .then((res) => {
+      const userList = res.data.userList;
+      console.log(userList);
+      for (let i = 0; i < userList.length; i++) {
+        toCreateUserListItem(res.data.userList[i]);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+const userListDiv = document.getElementById("user-list-modal");
+function toCreateUserListItem(data) {
+  const listItem = document.createElement("div");
+  listItem.classList.add("list-group-item");
+
+  const label = document.createElement("label");
+  label.setAttribute("for", data.id);
+  label.textContent = data.name;
+
+  const checkbox = document.createElement("input");
+  checkbox.setAttribute("type", "checkbox");
+  checkbox.setAttribute("id", data.id);
+  checkbox.setAttribute("value", data.name);
+
+  listItem.appendChild(checkbox);
+  listItem.appendChild(label);
+
+  userListDiv.appendChild(listItem);
 }

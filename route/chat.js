@@ -8,6 +8,12 @@ const chatController = require("../controller/chat");
 const authUser = require("../middleware/auth");
 
 router.get(
+  "/getUserList",
+  jsonparser,
+  authUser.authenticate,
+  chatController.getUserList
+);
+router.get(
   "/getMessage",
   jsonparser,
   authUser.authenticate,

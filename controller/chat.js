@@ -1,7 +1,21 @@
 const sequelize = require("../util/database");
 const Chat = require("../model/messages");
 const User = require("../model/user");
+const { Op } = require("sequelize");
+exports.getUserList = async (req, res, next) => {
+  try {
+    const userList = await User.findAll({
+      attributes: ["name", "id"],
+      where: { id: { [Op.not]: req.user.id } },
+    });
 
+    console.log(userList);
+    return res.status(201).json({ userList: userList, message: "success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(401).json({ message: "not able to get User" });
+  }
+};
 exports.getMessage = async (req, res, next) => {
   try {
     /*
