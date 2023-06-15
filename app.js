@@ -11,9 +11,12 @@ const app = express();
 //route
 const userRoute = require("./route/user");
 const chatRoute = require("./route/chat");
+const groupRoute = require("./route/group");
 //Model
 const User = require("./model/user");
 const Chat = require("./model/messages.js");
+const Group = require("./model/group");
+const GroupUser = require("./model/groupUser");
 
 app.use(
   cors({
@@ -26,11 +29,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(userRoute);
 app.use(chatRoute);
+app.use(groupRoute);
 
-User.hasMany(Chat);
+User.hasMany(Chat, { constraints: true, onDelete: "CASCADE" });
 Chat.belongsTo(User, { foreignKey: "userId" });
+
+User.belongsToMany(Group, { through: GroupUser });
+Group.belongsToMany(User, { through: GroupUser });
+
+Group.hasMany(Chat, { constraints: true, onDelete: "CASCADE" });
+Chat.belongsTo(Group);
+
 sequelize
-  .sync()
+  .sync({ force: true })
   .then((result) => {
     console.log("server running");
     app.listen(process.env.PORT_NUMBER);

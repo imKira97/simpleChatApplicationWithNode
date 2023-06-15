@@ -10,17 +10,47 @@ const config = {
   },
 };
 
-window.addEventListener("DOMContentLoaded", () => {
-  axios
+window.addEventListener("DOMContentLoaded", async () => {
+  await axios
     .get("http://localhost:5000/", config)
     .then((res) => {
       document.getElementById("show_login_user_name").innerHTML =
         res.data.userName;
       loginUserId = res.data.id;
     })
-    .catch((err) => {});
-});
+    .catch((err) => {
+      console.log(err);
+    });
 
+  await axios
+    .get("http://localhost:5000/getGroup", config)
+    .then((res) => {
+      const results = res.data.results;
+      for (let i = 0; i < results.length; i++) {
+        createGroupList(results[i]);
+      }
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+const chatList = document.getElementById("mychat-list-container");
+function createGroupList(data) {
+  const groupButton = document.createElement("button");
+  groupButton.type = "button";
+  groupButton.className = "list-group-item list-group-item-action";
+  groupButton.id = `${data.id}`;
+  groupButton.appendChild(document.createTextNode(`${data.groupName}`));
+  chatList.appendChild(groupButton);
+  groupButton.addEventListener("click", () => {
+    groupMessage(data.id);
+  });
+}
+
+function groupMessage(data) {
+  axios.get("http://localhost:5000/getGroupMessage");
+}
 window.addEventListener("DOMContentLoaded", getMessage);
 
 //setInterval(getMessage, 1000);
@@ -145,8 +175,22 @@ function createGroup() {
         selectedValues.push(checkedData);
       }
     });
-    console.log(selectedValues);
-    document.getElementById("groupName").value = "";
-    $(groupModal).modal("hide");
+    const data = { groupName: groupName, members: selectedValues };
+
+    axios
+      .post("http://localhost:5000/createGroup", data, config)
+      .then((res) => {
+        console.log(res);
+        document.getElementById("groupName").value = "";
+        document.getElementById("user-list-modal").innerHTML = "";
+        $(groupModal).modal("hide");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
+//to remove userlist from modal when modal dismiss
+groupModal.addEventListener("hidden.bs.modal", () => {
+  document.getElementById("user-list-modal").innerHTML = "";
+});
