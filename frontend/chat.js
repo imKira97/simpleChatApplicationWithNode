@@ -115,10 +115,38 @@ function toCreateUserListItem(data) {
   const checkbox = document.createElement("input");
   checkbox.setAttribute("type", "checkbox");
   checkbox.setAttribute("id", data.id);
+  checkbox.setAttribute("name", "users");
   checkbox.setAttribute("value", data.name);
 
   listItem.appendChild(checkbox);
   listItem.appendChild(label);
 
   userListDiv.appendChild(listItem);
+}
+
+const groupModal = document.getElementById("createGroupModal");
+//create group
+document
+  .getElementById("btnCreateGroupInModal")
+  .addEventListener("click", createGroup);
+function createGroup() {
+  const groupName = document.getElementById("groupName").value;
+  if (groupName.length < 5) {
+    console.log("group name should be above 5 words ");
+  } else {
+    const checkboxes = document.getElementsByName("users");
+    const selectedValues = [];
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        const checkedData = {
+          id: checkbox.id,
+          value: checkbox.value,
+        };
+        selectedValues.push(checkedData);
+      }
+    });
+    console.log(selectedValues);
+    document.getElementById("groupName").value = "";
+    $(groupModal).modal("hide");
+  }
 }
