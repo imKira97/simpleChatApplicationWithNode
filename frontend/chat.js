@@ -41,7 +41,33 @@ function createGroupList(data) {
   groupButton.type = "button";
   groupButton.className = "list-group-item list-group-item-action";
   groupButton.id = `${data.id}`;
+  groupButton.style.margin = "5px";
   groupButton.appendChild(document.createTextNode(`${data.groupName}`));
+
+  // Create delete button with icon
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "btn btn-danger btn-sm float-end";
+  deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+  groupButton.style.margin = "5px";
+  deleteButton.addEventListener("click", () => {
+    deleteGroup(data.id);
+  });
+
+  // Create edit button with icon
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "btn btn-primary btn-sm float-end";
+  groupButton.style.margin = "5px";
+  editButton.innerHTML = '<i class="fas fa-edit"></i>';
+  editButton.addEventListener("click", () => {
+    editGroup(data.id);
+  });
+
+  // Append buttons to groupButton
+  groupButton.appendChild(deleteButton);
+  groupButton.appendChild(editButton);
+
   chatList.appendChild(groupButton);
   groupButton.addEventListener("click", () => {
     groupMessage(data.id);
@@ -64,13 +90,12 @@ msgForm.addEventListener("submit", (e) => {
   axios
     .post("http://localhost:5000/sendMessage", data, config)
     .then((res) => {
-      console.log(res);
+      document.getElementById("messageText").value = "";
+      getMessage();
     })
     .catch((err) => {
       console.log(err);
     });
-  document.getElementById("messageText").value = "";
-  getMessage();
 });
 
 //getMessage
@@ -184,6 +209,7 @@ function createGroup() {
         document.getElementById("groupName").value = "";
         document.getElementById("user-list-modal").innerHTML = "";
         $(groupModal).modal("hide");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

@@ -24,9 +24,7 @@ exports.createGroup = async (req, res, next) => {
     const groupName = req.body.groupName;
     const members = req.body.members;
     const admin = req.user.id;
-    console.log();
-    console.log("      " + members);
-    console.log();
+
     const group = await Group.create({
       groupName: groupName,
       admin: admin,
