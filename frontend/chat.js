@@ -4,6 +4,10 @@ const createGroupBtn = document.getElementById("createGroupBtn");
 const token = localStorage.getItem("token");
 let loginUserId;
 let lastMessageId = localStorage.getItem("lastMessageId") || 0;
+let groupName;
+
+let chatArray = [];
+let groupId;
 const config = {
   headers: {
     Authorization: token,
@@ -17,6 +21,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("show_login_user_name").innerHTML =
         res.data.userName;
       loginUserId = res.data.id;
+      document.getElementById("sendMessageDiv").style.display = "none";
     })
     .catch((err) => {
       console.log(err);
@@ -44,14 +49,20 @@ function createGroupList(data) {
   groupButton.appendChild(document.createTextNode(`${data.groupName}`));
   chatList.appendChild(groupButton);
   groupButton.addEventListener("click", () => {
-    groupMessage(data.id);
+    groupMessageDiv(data.id, data.groupName);
   });
 }
 
-function groupMessage(data) {
-  axios.get("http://localhost:5000/getGroupMessage");
+function groupMessageDiv(gId, gName) {
+  groupId = gId;
+  groupName = gName;
+  console.log(groupId, groupName);
+  document.getElementById("show_group_name").innerHTML = `${groupName}`;
+  document.querySelector(".message-container").innerHTML = "";
+  document.getElementById("sendMessageDiv").style.display = "block";
+  chatArray = [];
+  getMessage(groupId, groupName);
 }
-window.addEventListener("DOMContentLoaded", getMessage);
 
 //setInterval(getMessage, 1000);
 
@@ -59,7 +70,8 @@ window.addEventListener("DOMContentLoaded", getMessage);
 msgForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const messageText = document.getElementById("messageText").value;
-  const data = { messageText: messageText };
+  console.log(groupId, groupName);
+  const data = { messageText: messageText, groupId: groupId };
 
   axios
     .post("http://localhost:5000/sendMessage", data, config)
@@ -70,14 +82,12 @@ msgForm.addEventListener("submit", (e) => {
       console.log(err);
     });
   document.getElementById("messageText").value = "";
-  getMessage();
 });
 
 //getMessage
-let chatArray = [];
-async function getMessage() {
+async function getMessage(groupId, groupName) {
   document.querySelector(".message-container").textContent = "";
-  let oldMessages = JSON.parse(localStorage.getItem("messages"));
+  let oldMessages = JSON.parse(localStorage.getItem(`messages${groupId}`));
   if (oldMessages == undefined || oldMessages.length == 0) {
     lastMessageId = 0;
   } else {
@@ -85,10 +95,12 @@ async function getMessage() {
   }
 
   const res = await axios.get(
-    `http://localhost:5000/getMessage?lastMessageId=${lastMessageId}`,
+    `http://localhost:5000/getMessage?lastMessageId=${lastMessageId}&groupId=${groupId}`,
     config
   );
+  console.log(res);
   let newMessages = res.data.data.messages;
+
   if (oldMessages) {
     chatArray = oldMessages.concat(newMessages);
   } else {
@@ -98,7 +110,7 @@ async function getMessage() {
   //   chatArray = chatArray.slice(chatArray.length - 10);
   // }
 
-  localStorage.setItem("messages", JSON.stringify(chatArray));
+  localStorage.setItem(`messages${groupId}`, JSON.stringify(chatArray));
   chatArray.forEach((chat) => {
     toCreateMessageDiv(chat, loginUserId);
   });
@@ -184,6 +196,7 @@ function createGroup() {
         document.getElementById("groupName").value = "";
         document.getElementById("user-list-modal").innerHTML = "";
         $(groupModal).modal("hide");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

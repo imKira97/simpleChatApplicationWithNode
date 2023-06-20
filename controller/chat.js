@@ -20,13 +20,18 @@ exports.getMessage = async (req, res, next) => {
   try {
     /*
     The include option allows you to specify which associated models you want to include in the query result. */
-    const { lastMessageId } = req.query;
+    const { lastMessageId, groupId } = req.query;
     console.log("last Id " + lastMessageId);
+    console.log("group Id " + groupId);
     let messages = await Chat.findAll({
-      include: {
-        model: User,
+      where: {
+        groupId: groupId,
+        id: { [Op.gt]: lastMessageId },
       },
+      include: [{ model: User, attributes: ["name", "id"] }],
     });
+
+    console.table(JSON.parse(JSON.stringify(messages)));
 
     let index = 0;
     if (lastMessageId) {
@@ -38,13 +43,7 @@ exports.getMessage = async (req, res, next) => {
     }
     messages = messages.slice(index);
 
-    // const messageArr = messages.map((message) => ({
-    //   id: message.userId,
-    //   content: message.message,
-    //   user: message.User.name,
-    // }));
     const messageArr = [];
-
     for (const message of messages) {
       const user = await User.findByPk(message.userId);
       const name = user.name;
@@ -54,6 +53,7 @@ exports.getMessage = async (req, res, next) => {
         userid: message.userId,
         message: message.message,
         user: name,
+        groupId: message.groupId,
       });
     }
 
@@ -68,9 +68,11 @@ exports.sendMessage = async (req, res, next) => {
   try {
     const messageText = req.body.messageText;
     const senderId = req.user.id;
-
+    const groupId = req.body.groupId;
+    console.log("groupId", groupId);
     const chat = await Chat.create({
       message: messageText,
+      groupId: groupId,
       userId: senderId,
     });
     //const messageData={loginUserId:req.user.id}

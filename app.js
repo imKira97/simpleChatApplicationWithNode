@@ -41,7 +41,7 @@ Group.hasMany(Chat, { constraints: true, onDelete: "CASCADE" });
 Chat.belongsTo(Group);
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then((result) => {
     console.log("server running");
     app.listen(process.env.PORT_NUMBER);
