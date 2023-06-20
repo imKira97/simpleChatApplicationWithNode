@@ -25,4 +25,11 @@ router.get(
   groupController.isGroupAdmin
 );
 
+router.get(
+  "/getAllUserFromGroup",
+  jsonparser,
+  authUser.authenticate,
+  groupController.getAllUsersFromGroup
+);
+
 module.exports = router;

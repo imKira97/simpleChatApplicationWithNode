@@ -71,15 +71,99 @@ async function groupMessageDiv(gId, gName) {
     .get(`http://localhost:5000/isAdmin?groupId=${groupId}`, config)
     .then((res) => {
       const userIsAdmin = res.data.isUserAdmin;
-      console.log(userIsAdmin);
+
       if (userIsAdmin === "true") {
-        console.log("user is admin");
+        createGroupOptions(true);
       } else {
-        console.log(`user is not admin`);
+        createGroupOptions(false);
       }
-      console.log("click");
       chatArray = [];
       getMessage(groupId, groupName);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function createGroupOptions(isAdmin) {
+  const groupOptionMenuItems = document.getElementById("optionsMenuItems");
+  groupOptionMenuItems.innerHTML = "";
+
+  if (isAdmin) {
+    const addUser = createMenuItem(
+      "Add User",
+      "addUser",
+      "#addUserModal",
+      addUserToGroup
+    );
+    const removeUser = createMenuItem(
+      "Remove User",
+      "removeUser",
+      "#removeUserModal",
+      removeUserFromGroup
+    );
+    groupOptionMenuItems.appendChild(addUser);
+    groupOptionMenuItems.appendChild(removeUser);
+  }
+  const showAllUser = createMenuItem(
+    "Show All User",
+    "displayAllUser",
+    "#showAllUserModal",
+    displayAllUser
+  );
+  const exitGroup = createMenuItem(
+    "Exit Group ",
+    "exitGroup",
+    null,
+    exitFromGroup
+  );
+
+  groupOptionMenuItems.appendChild(showAllUser);
+  groupOptionMenuItems.appendChild(exitGroup);
+}
+function createMenuItem(label, id, target, callback) {
+  const menuItem = document.createElement("button");
+  menuItem.classList.add("dropdown-item");
+  menuItem.type = "button";
+  menuItem.innerText = label;
+  menuItem.id = id;
+  if (target) {
+    menuItem.setAttribute("data-bs-toggle", "modal");
+    menuItem.setAttribute("data-bs-target", target);
+  }
+  menuItem.addEventListener("click", callback);
+
+  return menuItem;
+}
+//all function
+function addUserToGroup() {
+  console.log("add");
+}
+function removeUserFromGroup() {
+  console.log("remove");
+}
+function exitFromGroup() {
+  console.log("exit");
+}
+function displayAllUser() {
+  console.log("all users");
+  //getall users in group
+  axios
+    .get(`http://localhost:5000/getAllUserFromGroup?groupId=${groupId}`, config)
+    .then((res) => {
+      const users = res.data.data;
+      console.log(users);
+      const groupUserList = document.getElementById("userListInGroup");
+      groupUserList.innerHTML = "";
+      users.forEach((user) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = user.name;
+        listItem.id = user.id;
+        if (user.isAdmin) {
+          listItem.style.color = "red";
+        }
+        groupUserList.appendChild(listItem);
+      });
     })
     .catch((err) => {
       console.log(err);

@@ -40,6 +40,9 @@ Group.belongsToMany(User, { through: GroupUser });
 Group.hasMany(Chat, { constraints: true, onDelete: "CASCADE" });
 Chat.belongsTo(Group);
 
+//groupuser and user
+GroupUser.belongsTo(User, { foreignKey: "userId" });
+User.hasMany(GroupUser, { foreignKey: "userId" });
 sequelize
   .sync()
   .then((result) => {

@@ -42,9 +42,6 @@ exports.createGroup = async (req, res, next) => {
     const groupName = req.body.groupName;
     const members = req.body.members;
     const admin = req.user.id;
-    console.log();
-    console.log("      " + members);
-    console.log();
     const group = await Group.create({
       groupName: groupName,
       admin: admin,
@@ -68,5 +65,29 @@ exports.createGroup = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+exports.getAllUsersFromGroup = async (req, res, next) => {
+  try {
+    console.log("in get all users from group");
+    const groupId = req.query.groupId;
+    console.log("groupId");
+    const groupUsers = await GroupUser.findAll({
+      where: { groupId: groupId },
+      include: User,
+    });
+
+    console.table(JSON.parse(JSON.stringify(groupUsers)));
+    const users = groupUsers.map((groupUser) => ({
+      isAdmin: groupUser.isAdmin,
+      id: groupUser.user.id,
+      name: groupUser.user.name,
+    }));
+    console.log(users);
+    res.status(200).json({ message: "success", data: users });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
