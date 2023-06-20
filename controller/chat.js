@@ -21,8 +21,6 @@ exports.getMessage = async (req, res, next) => {
     /*
     The include option allows you to specify which associated models you want to include in the query result. */
     const { lastMessageId, groupId } = req.query;
-    console.log("last Id " + lastMessageId);
-    console.log("group Id " + groupId);
     let messages = await Chat.findAll({
       where: {
         groupId: groupId,
@@ -31,7 +29,7 @@ exports.getMessage = async (req, res, next) => {
       include: [{ model: User, attributes: ["name", "id"] }],
     });
 
-    console.table(JSON.parse(JSON.stringify(messages)));
+    //console.table(JSON.parse(JSON.stringify(messages)));
 
     let index = 0;
     if (lastMessageId) {

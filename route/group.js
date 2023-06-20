@@ -18,5 +18,11 @@ router.get(
   authUser.authenticate,
   groupController.getGroup
 );
+router.get(
+  "/isAdmin",
+  jsonparser,
+  authUser.authenticate,
+  groupController.isGroupAdmin
+);
 
 module.exports = router;

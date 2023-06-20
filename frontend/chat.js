@@ -46,22 +46,44 @@ function createGroupList(data) {
   groupButton.type = "button";
   groupButton.className = "list-group-item list-group-item-action";
   groupButton.id = `${data.id}`;
+
   groupButton.appendChild(document.createTextNode(`${data.groupName}`));
-  chatList.appendChild(groupButton);
-  groupButton.addEventListener("click", () => {
+
+  groupButton.addEventListener("click", async () => {
     groupMessageDiv(data.id, data.groupName);
   });
+
+  chatList.appendChild(groupButton);
 }
 
-function groupMessageDiv(gId, gName) {
+async function groupMessageDiv(gId, gName) {
+  //check for admin
+
   groupId = gId;
   groupName = gName;
   console.log(groupId, groupName);
   document.getElementById("show_group_name").innerHTML = `${groupName}`;
   document.querySelector(".message-container").innerHTML = "";
   document.getElementById("sendMessageDiv").style.display = "block";
-  chatArray = [];
-  getMessage(groupId, groupName);
+  document.getElementById("groupMenuButton").style.display = "block";
+
+  await axios
+    .get(`http://localhost:5000/isAdmin?groupId=${groupId}`, config)
+    .then((res) => {
+      const userIsAdmin = res.data.isUserAdmin;
+      console.log(userIsAdmin);
+      if (userIsAdmin === "true") {
+        console.log("user is admin");
+      } else {
+        console.log(`user is not admin`);
+      }
+      console.log("click");
+      chatArray = [];
+      getMessage(groupId, groupName);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 //setInterval(getMessage, 1000);

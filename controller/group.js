@@ -5,6 +5,24 @@ const { Op } = require("sequelize");
 const Group = require("../model/group");
 const GroupUser = require("../model/groupUser");
 
+exports.isGroupAdmin = async (req, res, next) => {
+  try {
+    console.log("here");
+
+    const groupId = req.query.groupId;
+
+    const isUserAdmin = await GroupUser.findOne({
+      where: { isAdmin: true, userId: req.user.id, groupId: groupId },
+    });
+    if (isUserAdmin) {
+      return res.status(201).json({ message: "success", isUserAdmin: "true" });
+    } else {
+      return res.status(201).json({ message: "success", isUserAdmin: "false" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 exports.getGroup = async (req, res, next) => {
   try {
     const results = await req.user.getGroups({
