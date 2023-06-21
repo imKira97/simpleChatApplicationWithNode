@@ -32,4 +32,25 @@ router.get(
   groupController.getAllUsersFromGroup
 );
 
+//not in group
+router.get(
+  "/usersNotInGroup",
+  jsonparser,
+  authUser.authenticate,
+  groupController.getAllUsersNotInGroup
+);
+
+router.post(
+  "/addNewUser",
+  jsonparser,
+  authUser.authenticate,
+  groupController.addNewUsersInGroup
+);
+
+router.put(
+  "/makeUserAdmin",
+  jsonparser,
+  authUser.authenticate,
+  groupController.newAdmin
+);
 module.exports = router;

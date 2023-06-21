@@ -228,6 +228,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <div class="form-group">
+                                                        <!-- Group Name input -->
                                                         <label for="groupName">Group Name:</label>
                                                         <input type="text" class="form-control" id="groupName" size="45"
                                                             minlength="5" required>
@@ -241,9 +242,6 @@
 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <!-- Group Name input -->
-
-
                                                     <!-- User List with checkboxes -->
                                                     <div class="form-group">
                                                         <label>Select Users:</label>
@@ -309,6 +307,53 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="showAllUserModalLabel">All User In Group</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul id="userListInGroup" class="list-group"></ul>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--2 add user in group modal -->
+                            <!-- Modal for showing user list -->
+                            <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModallLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addUserModalLabel">Add New User In Group</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label>Select Users:</label>
+                                                <div class="list-group " id="new-user-list-modal">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" onclick="addNewUsersInGroup()"
+                                                class="btn btn-secondary" data-bs-dismiss="modal">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Remove user in group modal -->
+
+                            <div class="modal fade" id="removeUserModal" tabindex="-1"
+                                aria-labelledby="removeUserModallLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="removeUserModalLabel">Remove User From Group
+                                            </h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>

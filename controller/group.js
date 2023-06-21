@@ -38,7 +38,6 @@ exports.getGroup = async (req, res, next) => {
 
 exports.createGroup = async (req, res, next) => {
   try {
-    console.log("here");
     const groupName = req.body.groupName;
     const members = req.body.members;
     const admin = req.user.id;
@@ -70,24 +69,87 @@ exports.createGroup = async (req, res, next) => {
 
 exports.getAllUsersFromGroup = async (req, res, next) => {
   try {
-    console.log("in get all users from group");
     const groupId = req.query.groupId;
-    console.log("groupId");
+
     const groupUsers = await GroupUser.findAll({
       where: { groupId: groupId },
       include: User,
     });
 
-    console.table(JSON.parse(JSON.stringify(groupUsers)));
+    //console.table(JSON.parse(JSON.stringify(groupUsers)));
     const users = groupUsers.map((groupUser) => ({
       isAdmin: groupUser.isAdmin,
       id: groupUser.user.id,
       name: groupUser.user.name,
     }));
-    console.log(users);
     res.status(200).json({ message: "success", data: users });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.getAllUsersNotInGroup = async (req, res, next) => {
+  try {
+    const groupId = req.query.groupId;
+
+    const users = await User.findAll({
+      attributes: ["id", "name"],
+      where: {
+        id: {
+          [Op.notIn]: sequelize.literal(
+            `(SELECT userId FROM groupUsers WHERE groupId = ${groupId})`
+          ),
+        },
+      },
+    });
+
+    console.table(JSON.parse(JSON.stringify(users)));
+
+    res.status(200).json({ message: "success", data: users });
+  } catch (err) {
+    res.status(500).json({ message: "something went wrong" });
+  }
+};
+
+exports.addNewUsersInGroup = async (req, res, next) => {
+  try {
+    console.log(req.body);
+
+    const groupId = req.body.groupId;
+    const newMembers = req.body.newMembers;
+
+    const result = await Promise.all(
+      newMembers.map(async (member) => {
+        await GroupUser.create({
+          groupId: groupId,
+          userId: member.id,
+        });
+      })
+    );
+
+    return res.status(200).json({ message: "new members added" });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.newAdmin = async (req, res, next) => {
+  try {
+    console.log("new admin ");
+    const userId = req.body.userId;
+    const groupId = req.body.groupId;
+    const groupName = req.body.groupName;
+
+    await GroupUser.update({ isAdmin: true }, { where: { userId, groupId } });
+    const newAdmin = await Group.create({
+      groupName: groupName,
+      admin: userId,
+      groupId: groupId,
+    });
+
+    return res.status(200).json({ message: "new admin" });
+  } catch (err) {
+    console.log(err);
   }
 };

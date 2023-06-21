@@ -137,8 +137,66 @@ function createMenuItem(label, id, target, callback) {
 }
 //all function
 function addUserToGroup() {
-  console.log("add");
+  axios
+    .get(`http://localhost:5000/usersNotInGroup?groupId=${groupId}`, config)
+    .then((res) => {
+      document.getElementById("new-user-list-modal").innerHTML = "";
+      const newUsers = res.data.data;
+      console.log(newUsers);
+      newUsers.forEach((users) => {
+        showNewUserList(users);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
+function showNewUserList(data) {
+  const userListDiv = document.getElementById("new-user-list-modal");
+  const listItem = document.createElement("div");
+  listItem.classList.add("list-group-item");
+  listItem.style.fontWeight = "bold";
+  const label = document.createElement("label");
+  label.setAttribute("for", data.id);
+  label.textContent = data.name;
+
+  const checkbox = document.createElement("input");
+  checkbox.setAttribute("type", "checkbox");
+  checkbox.setAttribute("id", data.id);
+  checkbox.setAttribute("name", "newUsers");
+  checkbox.setAttribute("value", data.name);
+
+  listItem.appendChild(checkbox);
+  listItem.appendChild(label);
+
+  userListDiv.appendChild(listItem);
+}
+
+//add new user
+function addNewUsersInGroup() {
+  console.log("group " + groupId);
+  const checkboxes = document.getElementsByName("newUsers");
+  const selectedValues = [];
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      const checkedData = {
+        id: checkbox.id,
+        name: checkbox.value,
+      };
+      selectedValues.push(checkedData);
+    }
+  });
+  const newUserData = { groupId: groupId, newMembers: selectedValues };
+  axios
+    .post(`http://localhost:5000/addNewUser`, newUserData, config)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
 function removeUserFromGroup() {
   console.log("remove");
 }
@@ -146,13 +204,12 @@ function exitFromGroup() {
   console.log("exit");
 }
 function displayAllUser() {
-  console.log("all users");
-  //getall users in group
   axios
     .get(`http://localhost:5000/getAllUserFromGroup?groupId=${groupId}`, config)
     .then((res) => {
       const users = res.data.data;
       console.log(users);
+
       const groupUserList = document.getElementById("userListInGroup");
       groupUserList.innerHTML = "";
       users.forEach((user) => {
@@ -162,6 +219,24 @@ function displayAllUser() {
         if (user.isAdmin) {
           listItem.style.color = "red";
         }
+        if (!user.isAdmin) {
+          const makeAdminButton = document.createElement("button");
+          makeAdminButton.textContent = "Make Admin";
+          makeAdminButton.classList.add(
+            "btn",
+            "btn-outline-secondary",
+            "btn-sm"
+          );
+          makeAdminButton.style.marginLeft = "5px";
+
+          makeAdminButton.addEventListener("click", () => {
+            makeAdmin(user.id, groupId); // Call the makeAdmin function passing the user id
+          });
+          listItem.appendChild(makeAdminButton);
+        }
+
+        // Append the "Make Admin" button to the list item
+
         groupUserList.appendChild(listItem);
       });
     })
@@ -170,6 +245,21 @@ function displayAllUser() {
     });
 }
 
+function makeAdmin(userId) {
+  console.log("click");
+  console.log(userId);
+  console.log(groupId);
+  console.log(groupName);
+  const data = { userId: userId, groupId: groupId, groupName: groupName };
+  axios
+    .put("http://localhost:5000/makeUserAdmin", data, config)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 //setInterval(getMessage, 1000);
 
 //sendMessage
@@ -251,8 +341,8 @@ createGroupBtn.addEventListener("click", () => {
     });
 });
 
-const userListDiv = document.getElementById("user-list-modal");
 function toCreateUserListItem(data) {
+  const userListDiv = document.getElementById("user-list-modal");
   const listItem = document.createElement("div");
   listItem.classList.add("list-group-item");
 
