@@ -104,7 +104,7 @@ exports.getAllUsersNotInGroup = async (req, res, next) => {
       },
     });
 
-    console.table(JSON.parse(JSON.stringify(users)));
+    //console.table(JSON.parse(JSON.stringify(users)));
 
     res.status(200).json({ message: "success", data: users });
   } catch (err) {
@@ -142,11 +142,6 @@ exports.newAdmin = async (req, res, next) => {
     const groupName = req.body.groupName;
 
     await GroupUser.update({ isAdmin: true }, { where: { userId, groupId } });
-    const newAdmin = await Group.create({
-      groupName: groupName,
-      admin: userId,
-      groupId: groupId,
-    });
 
     return res.status(200).json({ message: "new admin" });
   } catch (err) {
@@ -180,5 +175,75 @@ exports.removeUserFromGroup = async (req, res, next) => {
       .json({ message: "User removed from group successfully" });
   } catch (err) {
     console.log(err);
+  }
+};
+
+exports.exitFromGroup = async (req, res, next) => {
+  try {
+    console.log("Exit From Group");
+    const userId = req.user.id;
+    const groupId = req.body.groupId;
+
+    const groupUser = await GroupUser.findOne({
+      where: { groupId: groupId, userId: userId },
+    });
+
+    if (!groupUser) {
+      return res.status(404).json({ message: "User not found in group" });
+    }
+
+    const isUserAdmin = groupUser.isAdmin;
+
+    if (isUserAdmin) {
+      const members = await GroupUser.count({ where: { groupId: groupId } });
+      const noOfAdmin = await GroupUser.count({
+        where: { groupId: groupId, isAdmin: true },
+      });
+
+      console.log("members: " + members);
+      console.log("admin: " + noOfAdmin);
+
+      if (members > 2) {
+        await groupUser.destroy();
+
+        if (noOfAdmin < 2) {
+          const nextUser = await GroupUser.findOne({
+            where: {
+              groupId: groupId,
+              userId: { [Op.not]: userId },
+            },
+          });
+
+          if (nextUser) {
+            nextUser.isAdmin = true;
+            await nextUser.save();
+
+            // Update the new admin in the group table
+            await Group.update(
+              { admin: nextUser.userId },
+              { where: { id: groupId } }
+            );
+          }
+        }
+
+        return res
+          .status(200)
+          .json({ message: "User exited from group successfully" });
+      } else {
+        return res.status(400).json({
+          message:
+            "Cannot delete the last admin from the group. Delete the group instead.",
+        });
+      }
+    } else {
+      await groupUser.destroy();
+
+      return res
+        .status(200)
+        .json({ message: "User exited from group successfully" });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

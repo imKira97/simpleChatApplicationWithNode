@@ -193,6 +193,18 @@ function addNewUsersInGroup() {
 
 function exitFromGroup() {
   console.log("exit");
+  axios
+    .post(
+      "http://localhost:5000/exitUserFromGroup",
+      { groupId: groupId },
+      config
+    )
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 function displayAllUser() {
   axios

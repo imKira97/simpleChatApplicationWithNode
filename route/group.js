@@ -39,6 +39,13 @@ router.get(
   authUser.authenticate,
   groupController.getAllUsersNotInGroup
 );
+//not in group
+router.post(
+  "/exitUserFromGroup",
+  jsonparser,
+  authUser.authenticate,
+  groupController.exitFromGroup
+);
 
 router.post(
   "/addNewUser",
