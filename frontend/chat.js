@@ -96,14 +96,8 @@ function createGroupOptions(isAdmin) {
       "#addUserModal",
       addUserToGroup
     );
-    const removeUser = createMenuItem(
-      "Remove User",
-      "removeUser",
-      "#removeUserModal",
-      removeUserFromGroup
-    );
+
     groupOptionMenuItems.appendChild(addUser);
-    groupOptionMenuItems.appendChild(removeUser);
   }
   const showAllUser = createMenuItem(
     "Show All User",
@@ -197,9 +191,6 @@ function addNewUsersInGroup() {
     });
 }
 
-function removeUserFromGroup() {
-  console.log("remove");
-}
 function exitFromGroup() {
   console.log("exit");
 }
@@ -230,9 +221,19 @@ function displayAllUser() {
           makeAdminButton.style.marginLeft = "5px";
 
           makeAdminButton.addEventListener("click", () => {
-            makeAdmin(user.id, groupId); // Call the makeAdmin function passing the user id
+            makeAdmin(user.id); // Call the makeAdmin function passing the user id
+          });
+
+          const removeUserBtn = document.createElement("button");
+          removeUserBtn.textContent = "Remove User";
+          removeUserBtn.classList.add("btn", "btn-outline-secondary", "btn-sm");
+          removeUserBtn.style.marginLeft = "5px";
+
+          removeUserBtn.addEventListener("click", () => {
+            removeUser(user.id);
           });
           listItem.appendChild(makeAdminButton);
+          listItem.appendChild(removeUserBtn);
         }
 
         // Append the "Make Admin" button to the list item
@@ -246,15 +247,24 @@ function displayAllUser() {
 }
 
 function makeAdmin(userId) {
-  console.log("click");
-  console.log(userId);
-  console.log(groupId);
-  console.log(groupName);
   const data = { userId: userId, groupId: groupId, groupName: groupName };
   axios
     .put("http://localhost:5000/makeUserAdmin", data, config)
     .then((res) => {
       console.log(res);
+      $("#showAllUserModal").modal("hide");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+function removeUser(userId) {
+  const data = { userId: userId, groupId: groupId };
+  axios
+    .put("http://localhost:5000/removeUser", data, config)
+    .then((res) => {
+      console.log(res);
+      $("#showAllUserModal").modal("hide");
     })
     .catch((err) => {
       console.log(err);

@@ -53,4 +53,12 @@ router.put(
   authUser.authenticate,
   groupController.newAdmin
 );
+
+router.put(
+  "/removeUser",
+  jsonparser,
+  authUser.authenticate,
+  groupController.removeUserFromGroup
+);
+
 module.exports = router;

@@ -29,11 +29,6 @@
 
         }
 
-        .mychat-list-container {
-            height: 650px;
-            /* scrollableList */
-            overflow-y: auto;
-        }
 
         .list-group-item {
             background-color: bisque;
@@ -102,6 +97,8 @@
         .search-result:hover {
             background-color: lightgray;
         }
+
+
 
         .chat-header {
             font-size: 25px;
@@ -264,9 +261,10 @@
 
                             </div>
 
-                            <div class="row" style="border:1px solid wheat">
-                                <div class="col m-1">
-                                    <div id="mychat-list-container" class="list-group" style="width: 100%;">
+                            <div class="row " style="border:1px solid wheat; max-height: 50%;;">
+                                <div class="col">
+                                    <div id="mychat-list-container" class="list-group  overflow-auto"
+                                        style="width: 100%; max-height: 50%;">
 
                                     </div>
                                 </div>

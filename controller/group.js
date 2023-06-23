@@ -153,3 +153,32 @@ exports.newAdmin = async (req, res, next) => {
     console.log(err);
   }
 };
+
+exports.removeUserFromGroup = async (req, res, next) => {
+  try {
+    console.log("In remove user");
+    const userId = req.body.userId;
+    const groupId = req.body.groupId;
+
+    //find the group
+    const group = await Group.findByPk(groupId);
+    if (!group) {
+      return res.status(404).json({ message: "Group not found" });
+    }
+
+    //1st we will check if user is member or not then we will destroy it
+    const groupUser = await GroupUser.findOne({
+      where: { groupId: groupId, userId: userId },
+    });
+    if (!groupUser) {
+      return res.status(404).json({ message: "User not found in group" });
+    }
+
+    await groupUser.destroy();
+    return res
+      .status(200)
+      .json({ message: "User removed from group successfully" });
+  } catch (err) {
+    console.log(err);
+  }
+};
