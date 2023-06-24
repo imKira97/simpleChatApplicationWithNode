@@ -102,6 +102,14 @@ exports.newUser = async (req, res, next) => {
   }
 };
 
+exports.getUserName = async (req, res, next) => {
+  try {
+    const userName = req.user.name;
+    console.log(req.user.id);
+    return res.status(200).json({ userName: userName, id: req.user.id });
+  } catch (err) {}
+};
+
 function generateToken(id) {
   return jwt.sign({ userId: id }, process.env.TOKEN_SECRET);
 }

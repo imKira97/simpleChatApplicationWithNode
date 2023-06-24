@@ -10,11 +10,8 @@ const app = express();
 
 //route
 const userRoute = require("./route/user");
-const chatRoute = require("./route/chat");
 //Model
 const User = require("./model/user");
-const Chat = require("./model/chat");
-const Group = require("./model/group");
 
 app.use(
   cors({
@@ -26,29 +23,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(userRoute);
-app.use(chatRoute);
-
-// Associations
-User.hasMany(Chat, { foreignKey: "senderId", as: "sentMessages" });
-User.hasMany(Chat, { foreignKey: "receiverId", as: "receivedMessages" });
-
-//for group
-User.belongsTo(Group, { foreignKey: "adminId", as: "adminOfGroups" });
-User.belongsToMany(Group, {
-  through: "user_Groups",
-  foreignKey: "userId",
-  otherKey: "GroupId",
-});
-
-Group.belongsTo(User, { foreignKey: "adminId", as: "admin" });
-Group.belongsToMany(User, {
-  through: "user_Groups",
-  foreignKey: "GroupId",
-  otherKey: "userId",
-});
-Chat.belongsTo(User, { foreignKey: "senderId", as: "sender" });
-Chat.belongsTo(User, { foreignKey: "receiverId", as: "receiver" });
-
 sequelize
   .sync()
   .then((result) => {

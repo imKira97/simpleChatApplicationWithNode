@@ -96,9 +96,13 @@
             .post("http://localhost:5000/user/login", loginDetail)
             .then((result) => {
                 console.log(result);
-                alert('login successfully');
                 localStorage.setItem("token", result.data.token);
+<<<<<<< HEAD
                 window.location.href = "./chat.html"
+=======
+                window.location.href = './chat.html'
+
+>>>>>>> settingGroup
 
             })
             .catch((err) => {

@@ -11,6 +11,7 @@ const authenticate = (req, res, next) => {
     User.findByPk(user.userId).then((user) => {
       console.log(JSON.stringify(user));
       //we are setting our user object here
+
       req.user = user;
       next();
     });
