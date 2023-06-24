@@ -1,45 +1,28 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../util/database");
 
-const User = sequelize.define(
-  "User",
-  {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: Sequelize.STRING,
-      unique: true,
-    },
-    phone: {
-      type: Sequelize.STRING,
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    pic: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue:
-        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
-    },
-    // Add more columns for extra functionalities
-    isAdmin: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
-    },
+const User = sequelize.define("user", {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
   },
-  {
-    tableName: "users", // Replace with your table name
-    timestamps: true,
-  }
-);
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
+  phone: {
+    type: Sequelize.STRING,
+  },
+  password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+});
 
 module.exports = User;

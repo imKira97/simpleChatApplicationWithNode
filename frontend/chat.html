@@ -20,13 +20,8 @@
 
 
         .wholeContainer {
-<<<<<<< HEAD
-            width: auto;
-            height: 770px;
-=======
             width: 106%;
             height: 780px;
->>>>>>> settingGroup
             margin-top: 40px;
             background-color: darkcyan;
             padding: 3px;
@@ -34,25 +29,7 @@
 
         }
 
-<<<<<<< HEAD
-        .mychat-list-container {
-            height: 650px;
-            /* scrollableList */
-=======
 
-        .list-group-item {
-            background-color: bisque;
-        }
-
-        .message-container {
-            background-color: #FFA500;
-            height: 600px;
->>>>>>> settingGroup
-            overflow-y: auto;
-
-        }
-
-<<<<<<< HEAD
         .list-group-item {
             background-color: bisque;
         }
@@ -64,8 +41,6 @@
 
         }
 
-=======
->>>>>>> settingGroup
         .message {
             background-color: cornsilk;
             width: 20%;
@@ -94,15 +69,12 @@
             width: 100%;
         }
 
-<<<<<<< HEAD
-=======
         #dropDownDiv {
             display: flex;
 
 
         }
 
->>>>>>> settingGroup
         #searchResultsContainer {
             position: absolute;
             z-index: 9999;
@@ -126,19 +98,14 @@
             background-color: lightgray;
         }
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> settingGroup
         .chat-header {
             font-size: 25px;
             text-align: center;
             background-color: antiquewhite;
             margin: auto;
             width: 100%;
-<<<<<<< HEAD
-=======
         }
 
         #createGroupList {
@@ -163,7 +130,6 @@
         .modal-body {
             height: 50vh;
             overflow-y: auto;
->>>>>>> settingGroup
         }
     </style>
 
@@ -178,34 +144,17 @@
             <div class="row wholeContainer">
                 <div class="container">
                     <div id="row1" class="row  bg-info  m-1">
-<<<<<<< HEAD
-                        <div class="col col-lg-3 m-1  ">
-                            <div class="input-group">
-                                <form id="searchGroup" class="d-flex">
-                                    <input id="searchText" type="search" class="form-control"
-                                        placeholder="Search User" />
-=======
                         <div class="col-3  m-1  ">
                             <div class="input-group">
                                 <form id="searchGroup" class="d-flex">
                                     <input id="searchText" type="search" class="form-control" placeholder="Search"
                                         style="width: 150px;margin: 5px;" />
->>>>>>> settingGroup
                                     <button id="searchGroupBtn" type="button"
                                         class="btn btn-outline-dark">Search</button>
                                 </form>
                             </div>
                         </div>
 
-<<<<<<< HEAD
-                        <div class="col col-lg-8  bg-primary text-center" style="margin: 5px;">
-                            <h4>Chat App</h4>
-                        </div>
-                        <div class="col " style="margin: 5px;">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-=======
                         <div class="col-7   bg-primary text-center" style="margin: 7px;">
                             <h4 id="show_login_user_name" style="text-align: center;text-transform: capitalize;">Login
                                 User</h4>
@@ -220,7 +169,6 @@
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                     style="margin: 5px;">
->>>>>>> settingGroup
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#myModal"
@@ -263,19 +211,6 @@
                     <div id="row2" class="row bg-body m-1" style="width: 100%; height:695px;border:2px solid black">
                         <div class="col col-3">
                             <div class="row" style="border:1px solid wheat">
-<<<<<<< HEAD
-                                <div class="col"
-                                    style=" height:42px ;background-color: aquamarine; text-align: center;font-family: 'Franklin Gothic Medium'; font-size: large;">
-                                    My chat
-                                    <button type="button" class="btn border-0 btn-outline-primary"
-                                        style="margin-left:90px;">Create <i class="fas fa-plus"></i></button>
-                                </div>
-
-                            </div>
-                            <div class="row" style="border:1px solid wheat">
-                                <div class="col m-1">
-                                    <div id="mychat-list-container" class="list-group" style="width: 100%;">
-=======
                                 <!--create group modal-->
                                 <div class="col d-flex align-items-center justify-content-between"
                                     style=" height:42px ;background-color: aquamarine;font-family: 'Franklin Gothic Medium'; font-size: large;">
@@ -331,20 +266,12 @@
                                     <div id="mychat-list-container" class="list-group  overflow-auto"
                                         style="width: 100%; max-height: 100%;">
 
->>>>>>> settingGroup
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col">
                             <div class="row" style="border:1px solid wheat">
-<<<<<<< HEAD
-                                <div class="col" style="text-align: center; background-color: coral;">
-                                    <h3 id="show_login_user_name"
-                                        style="text-align: center;text-transform: capitalize;">User Name</h3>
-                                </div>
-                            </div>
-=======
                                 <div class="col d-flex " style="background-color: coral;">
                                     <div class="col-11  ">
                                         <h4 id="show_group_name"
@@ -441,7 +368,6 @@
 
 
                             <!--end-->
->>>>>>> settingGroup
                             <div class="row" style="border:1px solid wheat">
                                 <div class="message-container">
 
@@ -449,11 +375,7 @@
                                 <div class="row"
                                     style=" background-color: coral;border:1px solid wheat;height: 45px;padding: 1px;margin:auto;">
                                     <div class="col">
-<<<<<<< HEAD
-                                        <div class="sendMessage">
-=======
                                         <div class="sendMessage" id="sendMessageDiv">
->>>>>>> settingGroup
                                             <!--Message Form-->
                                             <form id="messageForm" class="d-flex">
                                                 <div class="form-group flex-grow-1 ">
@@ -484,9 +406,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-<script src="chat.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
 <script src="chat.js"></script>
