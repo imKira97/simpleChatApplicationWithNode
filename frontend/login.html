@@ -93,7 +93,7 @@
         console.log(loginDetail);
 
         axios
-            .post("http://localhost:5000/user/login", loginDetail)
+            .post("http://65.2.148.106:5000/user/login", loginDetail)
             .then((result) => {
                 console.log(result);
                 localStorage.setItem("token", result.data.token);
