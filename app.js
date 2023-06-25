@@ -31,6 +31,12 @@ app.use(userRoute);
 app.use(chatRoute);
 app.use(groupRoute);
 
+//serving files
+
+app.use((req, res) => {
+  console.log("url" + req.url);
+  res.sendFile(path.join(__dirname, `./frontend/${req.url}`));
+});
 User.hasMany(Chat, { constraints: true, onDelete: "CASCADE" });
 Chat.belongsTo(User, { foreignKey: "userId" });
 

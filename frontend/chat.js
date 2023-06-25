@@ -350,7 +350,7 @@ function toCreateMessageDiv(message, userId) {
 
 createGroupBtn.addEventListener("click", () => {
   axios
-    .get("http:localhost:5000/getUserList", config)
+    .get("http://localhost:5000/getUserList", config)
     .then((res) => {
       const userList = res.data.userList;
       console.log(userList);

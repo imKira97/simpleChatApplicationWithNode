@@ -9,7 +9,7 @@ exports.getUserList = async (req, res, next) => {
       where: { id: { [Op.not]: req.user.id } },
     });
 
-    console.log(userList);
+    console.table(userList);
     return res.status(201).json({ userList: userList, message: "success" });
   } catch (err) {
     console.log(err);
