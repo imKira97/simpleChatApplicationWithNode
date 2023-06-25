@@ -104,6 +104,7 @@
             .catch((err) => {
                 console.log(err.response.status);
                 if (err.response.status === 401) {
+                    gi
                     errorText.innerHTML = "User Not Authorized"
                 }
                 else if (err.response.status === 404) {
