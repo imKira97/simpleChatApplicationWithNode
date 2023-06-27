@@ -16,7 +16,7 @@ const config = {
 
 window.addEventListener("DOMContentLoaded", async () => {
   await axios
-    .get("http://65.2.148.106:3000/", config)
+    .get("http://localhost:3000/", config)
     .then((res) => {
       document.getElementById("show_login_user_name").innerHTML =
         res.data.userName;
@@ -28,7 +28,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     });
 
   await axios
-    .get("http://65.2.148.106:3000/getGroup", config)
+    .get("http://localhost:3000/getGroup", config)
     .then((res) => {
       const results = res.data.results;
       for (let i = 0; i < results.length; i++) {
@@ -68,7 +68,7 @@ async function groupMessageDiv(gId, gName) {
   document.getElementById("groupMenuButton").style.display = "block";
 
   await axios
-    .get(`http://65.2.148.106:3000/isAdmin?groupId=${groupId}`, config)
+    .get(`http://localhost:3000/isAdmin?groupId=${groupId}`, config)
     .then((res) => {
       const userIsAdmin = res.data.isUserAdmin;
 
@@ -132,7 +132,7 @@ function createMenuItem(label, id, target, callback) {
 //all function
 function addUserToGroup() {
   axios
-    .get(`http://65.2.148.106:3000/usersNotInGroup?groupId=${groupId}`, config)
+    .get(`http://localhost:3000/usersNotInGroup?groupId=${groupId}`, config)
     .then((res) => {
       document.getElementById("new-user-list-modal").innerHTML = "";
       const newUsers = res.data.data;
@@ -182,7 +182,7 @@ function addNewUsersInGroup() {
   });
   const newUserData = { groupId: groupId, newMembers: selectedValues };
   axios
-    .post(`http://65.2.148.106:3000/addNewUser`, newUserData, config)
+    .post(`http://localhost:3000/addNewUser`, newUserData, config)
     .then((res) => {
       console.log(res);
     })
@@ -195,7 +195,7 @@ function exitFromGroup() {
   console.log("exit");
   axios
     .post(
-      "http://65.2.148.106:3000/exitUserFromGroup",
+      "http://localhost:3000/exitUserFromGroup",
       { groupId: groupId },
       config
     )
@@ -208,10 +208,7 @@ function exitFromGroup() {
 }
 function displayAllUser() {
   axios
-    .get(
-      `http://65.2.148.106:3000/getAllUserFromGroup?groupId=${groupId}`,
-      config
-    )
+    .get(`http://localhost:3000/getAllUserFromGroup?groupId=${groupId}`, config)
     .then((res) => {
       const users = res.data.data;
       console.log(users);
@@ -264,7 +261,7 @@ function displayAllUser() {
 function makeAdmin(userId) {
   const data = { userId: userId, groupId: groupId, groupName: groupName };
   axios
-    .put("http://65.2.148.106:3000/makeUserAdmin", data, config)
+    .put("http://localhost:3000/makeUserAdmin", data, config)
     .then((res) => {
       console.log(res);
       $("#showAllUserModal").modal("hide");
@@ -276,7 +273,7 @@ function makeAdmin(userId) {
 function removeUser(userId) {
   const data = { userId: userId, groupId: groupId };
   axios
-    .put("http://65.2.148.106:3000/removeUser", data, config)
+    .put("http://localhost:3000/removeUser", data, config)
     .then((res) => {
       console.log(res);
       $("#showAllUserModal").modal("hide");
@@ -295,7 +292,7 @@ msgForm.addEventListener("submit", (e) => {
   const data = { messageText: messageText, groupId: groupId };
 
   axios
-    .post("http://65.2.148.106:3000/sendMessage", data, config)
+    .post("http://localhost:3000/sendMessage", data, config)
     .then((res) => {
       console.log(res);
     })
@@ -316,7 +313,7 @@ async function getMessage(groupId, groupName) {
   }
 
   const res = await axios.get(
-    `http://65.2.148.106:3000/getMessage?lastMessageId=${lastMessageId}&groupId=${groupId}`,
+    `http://localhost:3000/getMessage?lastMessageId=${lastMessageId}&groupId=${groupId}`,
     config
   );
   console.log(res);
@@ -353,7 +350,7 @@ function toCreateMessageDiv(message, userId) {
 
 createGroupBtn.addEventListener("click", () => {
   axios
-    .get("http://65.2.148.106:3000/getUserList", config)
+    .get("http://localhost:3000/getUserList", config)
     .then((res) => {
       const userList = res.data.userList;
       console.log(userList);
@@ -411,7 +408,7 @@ function createGroup() {
     const data = { groupName: groupName, members: selectedValues };
 
     axios
-      .post("http://65.2.148.106:3000/createGroup", data, config)
+      .post("http://localhost:3000/createGroup", data, config)
       .then((res) => {
         console.log(res);
         document.getElementById("groupName").value = "";
