@@ -2,6 +2,39 @@ const sequelize = require("../util/database");
 const Chat = require("../model/messages");
 const User = require("../model/user");
 const { Op } = require("sequelize");
+const fs = require("fs");
+const AWS = require("aws-sdk");
+
+async function uploadToS3(data, filename) {
+  const BUCKET_NAME = process.env.BUCKET_NAME;
+  const IAM_USER_KEY = process.env.IAM_USER_KEY;
+  const IAM_USER_SECRET_ID = process.env.IAM_USER_SECRET_ID;
+
+  //creating s3 instance
+  let s3Bucket = new AWS.S3({
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET_ID,
+  });
+
+  //let base64data = Buffer.from(JSON.stringify(data));
+  var params = {
+    Bucket: BUCKET_NAME,
+    Key: filename,
+    Body: data,
+    ACL: "public-read",
+  };
+  return new Promise((resolve, reject) => {
+    s3Bucket.upload(params, (err, s3Response) => {
+      if (err) {
+        console.log("Something Went Wrong in Upload", err);
+        reject(err);
+      } else {
+        resolve(s3Response.Location);
+      }
+    });
+  });
+}
+
 exports.getUserList = async (req, res, next) => {
   try {
     const userList = await User.findAll({
@@ -64,15 +97,31 @@ exports.getMessage = async (req, res, next) => {
 
 exports.sendMessage = async (req, res, next) => {
   try {
-    const messageText = req.body.messageText;
+    console.log("send message");
+    console.dir(JSON.stringify(req.body));
+    const file = req.file;
+
     const senderId = req.user.id;
     const groupId = req.body.groupId;
-    console.log("groupId", groupId);
-    const chat = await Chat.create({
-      message: messageText,
-      groupId: groupId,
-      userId: senderId,
-    });
+
+    console.log("file is " + file);
+    if (file) {
+      fileName = req.body.messageText;
+      const fileUrl = await uploadToS3(file.buffer, fileName);
+      console.log("url is" + fileUrl);
+      const chat = await Chat.create({
+        message: fileUrl,
+        groupId: groupId,
+        userId: senderId,
+      });
+    } else {
+      const chat = await Chat.create({
+        message: req.body.messageText,
+        groupId: groupId,
+        userId: senderId,
+      });
+    }
+
     //const messageData={loginUserId:req.user.id}
     return res.status(201).json({ message: "success" });
   } catch (err) {

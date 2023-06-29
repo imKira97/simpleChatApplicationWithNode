@@ -36,6 +36,8 @@ exports.getGroup = async (req, res, next) => {
 
 exports.createGroup = async (req, res, next) => {
   try {
+    console.log("create group");
+    console.log(req.body);
     const groupName = req.body.groupName;
     const members = req.body.members;
     const admin = req.user.id;

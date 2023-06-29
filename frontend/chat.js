@@ -2,6 +2,8 @@ const msgForm = document.getElementById("messageForm");
 const btnSend = document.getElementById("sendBtn");
 const createGroupBtn = document.getElementById("createGroupBtn");
 const token = localStorage.getItem("token");
+
+const fileInput = document.getElementById("myfile");
 let loginUserId;
 let lastMessageId = localStorage.getItem("lastMessageId") || 0;
 let groupName;
@@ -291,15 +293,38 @@ function removeUser(userId) {
 //setInterval(getMessage, 1000);
 
 //sendMessage
+const messageText = document.getElementById("messageText");
+fileInput.addEventListener("change", (e) => {
+  const selectedFile = e.target.files[0];
+  if (selectedFile) {
+    messageText.value = selectedFile.name;
+  }
+  console.log(selectedFile);
+});
+messageText.addEventListener("input", function () {
+  if (messageText.value === "") {
+    fileInput.value = null;
+  }
+});
+
 msgForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const messageText = document.getElementById("messageText").value;
-
-  const data = {
-    messageText: messageText,
-    groupId: groupId,
-    groupName: groupName,
-  };
+  let data;
+  if (fileInput.files.length > 0) {
+    const selectedFile = fileInput.files[0];
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("messageText", messageText.value);
+    formData.append("groupId", groupId);
+    formData.append("groupName", groupName);
+    data = formData;
+  } else {
+    data = {
+      messageText: messageText.value,
+      groupId: groupId,
+      groupName: groupName,
+    };
+  }
   axios
     .post("http://localhost:3000/sendMessage", data, config)
     .then((res) => {
@@ -312,6 +337,7 @@ msgForm.addEventListener("submit", (e) => {
     });
 
   document.getElementById("messageText").value = "";
+  fileInput.value = null;
 });
 
 //getMessage
@@ -360,14 +386,27 @@ function toCreateMessageDiv(message, userId) {
   const chatDiv = document.createElement("div");
   if (userId === message.userid) {
     chatDiv.className = "message right";
-    chatDiv.innerHTML = `${message.user}: ${message.message}`;
+    //check for link
+    if (isLink(message.message)) {
+      chatDiv.innerHTML = `${message.user}: <a href="${message.message}">File</a>`;
+    } else {
+      chatDiv.innerHTML = `${message.user}: ${message.message}`;
+    }
   } else {
     chatDiv.className = "message left";
-    chatDiv.innerHTML = `${message.user}:${message.message}`;
+    if (isLink(message.message)) {
+      chatDiv.innerHTML = `${message.user}: <a href="${message.message}">File</a>`;
+    } else {
+      chatDiv.innerHTML = `${message.user}: ${message.message}`;
+    }
   }
   messageContainer.appendChild(chatDiv);
 }
 
+function isLink(message) {
+  const urlPattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i;
+  return urlPattern.test(message);
+}
 createGroupBtn.addEventListener("click", () => {
   axios
     .get("http://localhost:3000/getUserList", config)
