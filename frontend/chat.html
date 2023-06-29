@@ -131,6 +131,19 @@
             height: 50vh;
             overflow-y: auto;
         }
+
+        .attach-icon {
+            font-size: 20px;
+            margin-left: 5px;
+            color: black;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        /* Hide the file input */
+        #myfile {
+            display: none;
+        }
     </style>
 
     <title>Chat</title>
@@ -378,7 +391,11 @@
                                         <div class="sendMessage" id="sendMessageDiv">
                                             <!--Message Form-->
                                             <form id="messageForm" class="d-flex">
-                                                <div class="form-group flex-grow-1 ">
+                                                <div class="form-group flex-grow-1 d-flex align-items-center ">
+                                                    <label for="myfile">
+                                                        <i class="fas fa-paperclip attach-icon"></i>
+                                                    </label>
+                                                    <input type="file" id="myfile" name="myfile">
                                                     <input type="text" id="messageText" class="form-control bg-info"
                                                         placeholder="Enter a message" required>
                                                 </div>
@@ -408,6 +425,10 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+<!--library for socket-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
+
 <script src="chat.js"></script>
 
 </html>

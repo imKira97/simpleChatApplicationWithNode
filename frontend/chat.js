@@ -14,6 +14,11 @@ const config = {
   },
 };
 
+const socket = io("http://localhost:3000");
+
+//custom event
+//socket.emit("custom-event", "hello whats up");
+
 window.addEventListener("DOMContentLoaded", async () => {
   await axios
     .get("http://localhost:3000/", config)
@@ -61,7 +66,7 @@ async function groupMessageDiv(gId, gName) {
 
   groupId = gId;
   groupName = gName;
-  console.log(groupId, groupName);
+
   document.getElementById("show_group_name").innerHTML = `${groupName}`;
   document.querySelector(".message-container").innerHTML = "";
   document.getElementById("sendMessageDiv").style.display = "block";
@@ -79,6 +84,7 @@ async function groupMessageDiv(gId, gName) {
       }
       chatArray = [];
       getMessage(groupId, groupName);
+      socket.emit("getgroupId", groupId);
     })
     .catch((err) => {
       console.log(err);
@@ -288,22 +294,29 @@ function removeUser(userId) {
 msgForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const messageText = document.getElementById("messageText").value;
-  console.log(groupId, groupName);
-  const data = { messageText: messageText, groupId: groupId };
 
+  const data = {
+    messageText: messageText,
+    groupId: groupId,
+    groupName: groupName,
+  };
   axios
     .post("http://localhost:3000/sendMessage", data, config)
     .then((res) => {
       console.log(res);
+      socket.emit("sendmessage", data);
+      getMessage(groupId, groupName);
     })
     .catch((err) => {
       console.log(err);
     });
+
   document.getElementById("messageText").value = "";
 });
 
 //getMessage
 async function getMessage(groupId, groupName) {
+  console.log(groupName);
   document.querySelector(".message-container").textContent = "";
   let oldMessages = JSON.parse(localStorage.getItem(`messages${groupId}`));
   if (oldMessages == undefined || oldMessages.length == 0) {
@@ -333,6 +346,13 @@ async function getMessage(groupId, groupName) {
     toCreateMessageDiv(chat, loginUserId);
   });
 }
+
+socket.on("receivemessage", (message) => {
+  console.log("received" + message);
+  chatArray.push(message);
+  getMessage(message.groupId, message.groupName);
+  //toCreateMessageDiv(message.messageText, loginUserId);
+});
 
 //to create message box in UI
 function toCreateMessageDiv(message, userId) {

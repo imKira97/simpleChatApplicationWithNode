@@ -1,12 +1,30 @@
 require("dotenv").config();
 const express = require("express");
+const http = require("http");
 const bodyParser = require("body-parser");
 const path = require("path");
 var cors = require("cors");
 const fs = require("fs");
 const sequelize = require("./util/database");
 
+const { Server } = require("socket.io");
+
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+io.on("connection", (socket) => {
+  console.log(socket.id);
+
+  socket.on("getgroupId", (groupId) => {
+    console.log("groupid is " + groupId);
+    socket.join(groupId);
+  });
+  socket.on("sendmessage", (data) => {
+    socket.broadcast.emit("receivemessage", data);
+    //io.to(data.groupId).emit("receivemessage", data);
+  });
+});
 
 //route
 const userRoute = require("./route/user");
@@ -53,7 +71,8 @@ sequelize
   .sync()
   .then((result) => {
     console.log("server running");
-    app.listen(process.env.PORT_NUMBER);
+    //app.listen(process.env.PORT_NUMBER);
+    server.listen(process.env.PORT_NUMBER);
   })
   .catch((err) => {
     console.log(err);

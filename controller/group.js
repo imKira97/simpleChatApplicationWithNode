@@ -7,8 +7,6 @@ const GroupUser = require("../model/groupUser");
 
 exports.isGroupAdmin = async (req, res, next) => {
   try {
-    console.log("here");
-
     const groupId = req.query.groupId;
 
     const isUserAdmin = await GroupUser.findOne({
@@ -114,7 +112,7 @@ exports.getAllUsersNotInGroup = async (req, res, next) => {
 
 exports.addNewUsersInGroup = async (req, res, next) => {
   try {
-    console.log(req.body);
+    //console.log(req.body);
 
     const groupId = req.body.groupId;
     const newMembers = req.body.newMembers;
@@ -136,7 +134,7 @@ exports.addNewUsersInGroup = async (req, res, next) => {
 
 exports.newAdmin = async (req, res, next) => {
   try {
-    console.log("new admin ");
+    //console.log("new admin ");
     const userId = req.body.userId;
     const groupId = req.body.groupId;
     const groupName = req.body.groupName;
@@ -151,7 +149,7 @@ exports.newAdmin = async (req, res, next) => {
 
 exports.removeUserFromGroup = async (req, res, next) => {
   try {
-    console.log("In remove user");
+    //console.log("In remove user");
     const userId = req.body.userId;
     const groupId = req.body.groupId;
 
@@ -180,7 +178,7 @@ exports.removeUserFromGroup = async (req, res, next) => {
 
 exports.exitFromGroup = async (req, res, next) => {
   try {
-    console.log("Exit From Group");
+    //console.log("Exit From Group");
     const userId = req.user.id;
     const groupId = req.body.groupId;
 
@@ -200,8 +198,8 @@ exports.exitFromGroup = async (req, res, next) => {
         where: { groupId: groupId, isAdmin: true },
       });
 
-      console.log("members: " + members);
-      console.log("admin: " + noOfAdmin);
+      //console.log("members: " + members);
+      //console.log("admin: " + noOfAdmin);
 
       if (members > 2) {
         await groupUser.destroy();

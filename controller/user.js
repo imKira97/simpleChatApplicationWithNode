@@ -4,28 +4,28 @@ const jwt = require("jsonwebtoken");
 
 exports.loginUser = async (req, res, next) => {
   try {
-    console.log(req.body);
+    //console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
 
     const userMatch = await User.findOne({ where: { email: email } });
-    console.log("user", userMatch);
+    //console.log("user", userMatch);
 
     if (userMatch) {
       const isUserPassword = await bcrypt.compare(password, userMatch.password);
 
       if (isUserPassword) {
-        console.log("login success");
+        // console.log("login success");
         return res.status(201).json({
           message: "login success",
           token: generateToken(userMatch.id),
         });
       } else {
-        console.log("password fail");
+        //console.log("password fail");
         return res.status(401).json({ message: "User not authorized  " });
       }
     } else {
-      console.log("user not exist");
+      //console.log("user not exist");
       return res.status(404).json({ message: "User not found" });
     }
   } catch (err) {
@@ -64,9 +64,11 @@ exports.newUser = async (req, res, next) => {
 exports.getUserName = async (req, res, next) => {
   try {
     const userName = req.user.name;
-    console.log(req.user.id);
+
     return res.status(200).json({ userName: userName, id: req.user.id });
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 function generateToken(id) {
