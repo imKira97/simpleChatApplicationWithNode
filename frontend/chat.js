@@ -66,6 +66,7 @@ function createGroupList(data) {
 async function groupMessageDiv(gId, gName) {
   //check for admin
 
+  console.log("click");
   groupId = gId;
   groupName = gName;
 
@@ -342,7 +343,6 @@ msgForm.addEventListener("submit", (e) => {
 
 //getMessage
 async function getMessage(groupId, groupName) {
-  console.log(groupName);
   document.querySelector(".message-container").textContent = "";
   let oldMessages = JSON.parse(localStorage.getItem(`messages${groupId}`));
   if (oldMessages == undefined || oldMessages.length == 0) {
@@ -374,14 +374,18 @@ async function getMessage(groupId, groupName) {
 }
 
 socket.on("receivemessage", (message) => {
-  console.log("received" + message);
-  chatArray.push(message);
-  getMessage(message.groupId, message.groupName);
+  console.log("received" + message.groupId);
+  if (message.groupId === groupId) {
+    chatArray.push(message);
+    getMessage(message.groupId, message.groupName);
+  }
+
   //toCreateMessageDiv(message.messageText, loginUserId);
 });
 
 //to create message box in UI
 function toCreateMessageDiv(message, userId) {
+  console.log(groupId);
   const messageContainer = document.querySelector(".message-container");
   const chatDiv = document.createElement("div");
   if (userId === message.userid) {
@@ -484,3 +488,9 @@ function createGroup() {
 groupModal.addEventListener("hidden.bs.modal", () => {
   document.getElementById("user-list-modal").innerHTML = "";
 });
+
+function logout() {
+  console.log("logout");
+  localStorage.clear();
+  window.location.href = "./login.html";
+}

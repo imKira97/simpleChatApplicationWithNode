@@ -21,8 +21,8 @@ io.on("connection", (socket) => {
     socket.join(groupId);
   });
   socket.on("sendmessage", (data) => {
-    socket.broadcast.emit("receivemessage", data);
-    //io.to(data.groupId).emit("receivemessage", data);
+    //socket.broadcast.emit("receivemessage", data);
+    io.to(data.groupId).emit("receivemessage", data);
   });
 });
 
