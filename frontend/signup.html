@@ -107,7 +107,7 @@
 
     const userDetail = { name: name, email: email, phone: phone, password: pwd };
     console.log(userDetail);
-    axios.post('http://localhost:3000/user/signUp', userDetail).then((result) => {
+    axios.post('http://65.2.148.106:3000/user/signUp', userDetail).then((result) => {
       console.log('response' + result);
       alert('signup successfully');
       window.location.href = "./login.html"
